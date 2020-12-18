@@ -7,5 +7,8 @@
 
 #include "Vec.h"
 
+class View{
+
+};
 
 #endif //NEWCPURENDER_VIEW_H

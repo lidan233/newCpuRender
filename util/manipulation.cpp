@@ -80,6 +80,7 @@ Matrix44& manipulation::rotation_z(float cosangle,float sinangle)
     R[0][0] = R[1][1] = cosangle ;
     R[0][1] = -sinangle ;
     R[1][0] = sinangle ;
+    return R ;
 }
 
 Matrix44& manipulation::projection(float camera){
