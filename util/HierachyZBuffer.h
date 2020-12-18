@@ -1,0 +1,14 @@
+//
+// Created by 李源 on 2020-12-12.
+//
+
+#ifndef HIERARCHYZBUFFER_HIERACHYZBUFFER_H
+#define HIERARCHYZBUFFER_HIERACHYZBUFFER_H
+
+
+class HierachyZBuffer {
+
+};
+
+
+#endif //HIERARCHYZBUFFER_HIERACHYZBUFFER_H
