@@ -38,10 +38,10 @@ namespace Vec {
     };
 
     template<size_t DIM, typename T>
-    T &operator*(const vec<DIM, T> &lhs, const vec<DIM, T> &rhs) {
-        T ret = T();
+    T operator*(const vec<DIM, T> &lhs, const vec<DIM, T> &rhs) {
+        double ret = double(0.0) ;
         for (size_t i = DIM; i--; ret += lhs[i] * rhs[i]);
-        return ret;
+        return T(ret);
     }
 
     template<size_t DIM, typename T>
@@ -407,6 +407,14 @@ namespace Vec {
     std::ostream &operator<<(std::ostream &out, mat<DimRows, DimCols, T> &m) {
         for (size_t i = 0; i < DimRows; i++) out << m[i] << std::endl;
         return out;
+    }
+
+    vec<3,float> min(vec<3,float> left, vec<3,float> right)
+    {
+        vec<3,float> result ;
+        result[0] = std::min(left[0],right[0]) ;
+        result[1] = std::min(left[1],right[1]) ;
+        result[2] = std::min(left[2],right[2]) ;
     }
 
 }

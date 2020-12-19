@@ -76,6 +76,16 @@ inline vector<string> getstringObj(string data )
     return result ;
 }
 
+class ObjData{
+public:
+    std::vector<Vec3f> verts_;
+    std::vector<Vec3i> faces_;
+    std::vector<Vec3i> idxTex_ ;
+    std::vector<Vec2f> texture ;
+    std::vector<Vec3f> norms ;
+    std::vector<Vec3i> idxNorm_ ;
+};
+
 inline void readObj(const string filename,vector<Vec3f>& verts_,vector<vector<int> >& faces_,vector<vector<int> >& idxTex_,vector<Vec2f>& texture,vector<Vec3f>& norms,vector<vector<int> >& idxNorm_) {
     std::ifstream in;
     in.open (filename, std::ifstream::in);
@@ -152,8 +162,6 @@ inline void normalVertexs(vector<Vec3f>& s_verts ,vector<Vec3i>& verts_,int heig
         verts_[i] = manipulation::m2v(viewport*project*lookat*screen) ;
 //        cout<<" i "<<verts_[i][0]<<" "<<verts_[i][1]<<" "<<verts_[i][2]<<" "<<endl ;
     }
-
-
 
 //    for(int i = 0 ;i < verts_.size();i++)
 //    {

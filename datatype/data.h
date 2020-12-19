@@ -313,9 +313,9 @@ Lmatrix<T>::Lmatrix(const Lmatrix &rhs) : size_matrix_m(rhs.size_matrix_m), size
 
 // other matrix named rhs may has the different size with this matrix
 template <class T>
-Lmatrix<T> & Lmatrix<T>::operator=(const Lmatrix &rhs)
+Lmatrix<T> & Lmatrix<T>::operator=(const Lmatrix<T> &rhs)
 {
-    if(this != rhs)
+    if(this != &rhs)
     {
         int i,j,nel ;
         if(size_matrix_m != rhs.size_matrix_m || size_matrix_n != rhs.size_matrix_n)
@@ -332,8 +332,9 @@ Lmatrix<T> & Lmatrix<T>::operator=(const Lmatrix &rhs)
             data = size_matrix_m > 0 ? new T*[size_matrix_m] : nullptr ;
             nel = size_matrix_m*size_matrix_n ;
             if(data) data[0] = nel >0 ? new T[nel] : nullptr ;
-            for(int i = 0;  i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n;
+            for(int i = 1;  i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n;
         }
+
         for(int i = 0; i <size_matrix_m; i++) for(int j = 0 ; j< size_matrix_n; j++) data[i][j] = rhs[i][j] ;
 
     }

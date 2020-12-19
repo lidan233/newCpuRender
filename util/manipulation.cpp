@@ -44,6 +44,13 @@ Matrix44& manipulation::zoom(float factor)
     return Z ;
 }
 
+Matrix44& manipulation::zoom(Matrix44& mat, float factor)
+{
+    mat[0][0] *= factor ;
+    mat[1][1] *= factor ;
+    mat[2][2] *= factor ;
+
+}
 
 Matrix44& manipulation::tranlation(Vec3f v)
 {
@@ -52,6 +59,13 @@ Matrix44& manipulation::tranlation(Vec3f v)
     Tr[1][3] = v.y ;
     Tr[2][3] = v.z ;
     return Tr  ;
+}
+
+Matrix44& manipulation::translation(Matrix44& mat,Vec3f v)
+{
+    mat[0][3] += v.x ;
+    mat[1][3] += v.y ;
+    mat[2][3] += v.z ;
 }
 
 //逆时针旋转
