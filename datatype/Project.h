@@ -6,18 +6,17 @@
 #define NEWCPURENDER_PROJECT_H
 
 #include "Vec.h"
+#include "camera.h"
+#include "manipulation.h"
 
 class Project{
 private:
     Matrix44 projectMatrix ;
 
 public:
-    Project()
+    Project(camera& ca,int HEIGHT, int WIDTH, float near, float far )
     {
-        projectMatrix[0][0] = 1.0f ;
-        projectMatrix[1][1] = 1.0f ;
-        projectMatrix[2][2] = 1.0f ;
-        projectMatrix[3][3] = 1.0f ;
+        projectMatrix = manipulation::perspective(radians(ca.getZoom()), float(WIDTH)/float(HEIGHT), 0.1f, 1000.0f) ;
     }
 
     void change(std::vector<Matrix41>& verts)
@@ -27,6 +26,7 @@ public:
             verts[i] = projectMatrix*verts[i] ;
         }
     }
+    Matrix44 getMatrix() { return projectMatrix ; }
 
 };
 

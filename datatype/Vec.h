@@ -12,7 +12,7 @@
 namespace Vec {
 
 
-    template<size_t DimCols, size_t DimRows, typename T>
+    template<size_t DimRows, size_t DimCols, typename T>
     class mat;
 
     template<size_t DIM, typename T>
@@ -24,6 +24,10 @@ namespace Vec {
     public:
         vec() {
             for (size_t i = DIM; i--; data_[i] = T());
+        }
+
+        vec(const vec<DIM,T>& ano){
+            for (size_t i = DIM ; i--; data_[i] = ano[i]) ;
         }
 
         T &operator[](const size_t i) {
@@ -43,6 +47,21 @@ namespace Vec {
         for (size_t i = DIM; i--; ret += lhs[i] * rhs[i]);
         return T(ret);
     }
+
+    template<size_t DIM, typename T>
+    vec<DIM, T> operator*(const vec<DIM, T> &lhs, const T &rhs) {
+        vec<DIM, T> res ;
+        for (size_t i = DIM; i--; res[i] = lhs[i] * rhs);
+        return res;
+    }
+
+    template<size_t DIM, typename T>
+    vec<DIM, T> operator*(const T &rhs,const vec<DIM, T> &lhs) {
+        vec<DIM, T> res ;
+        for (size_t i = DIM; i--; res[i] = lhs[i] * rhs);
+        return res;
+    }
+
 
     template<size_t DIM, typename T>
     vec<DIM, T> operator+(vec<DIM, T> lhs, const vec<DIM, T> rhs) {
@@ -156,6 +175,7 @@ namespace Vec {
         };
 
         vec() : x(T()), y(T()), z(T()) {}
+        vec(T t) : x(t), y(t), z(t) {}
 
         vec(T X, T Y, T Z) : x(X), y(Y), z(Z) {}
 
@@ -175,6 +195,11 @@ namespace Vec {
                 z(T()) {
             *this = v;
         }
+
+//        vec<3, T> operator-(const vec<3, T> &v) {
+//            vec<3,T> res(-this->x, -this->y , -this->z) ;
+//            return res ;
+//        }
 
         vec<3, T> &operator=(const vec<3, T> &v) {
             if (this != &v) {
@@ -196,11 +221,16 @@ namespace Vec {
             return i <= 0 ? x : (1 == i ? y : z);
         }
 
-        T norm() { return sqrt(x * x + y * y + z * z); }
+        T norm() const { return sqrt(x * x + y * y + z * z); }
 
         vec<3, T> &normalize(T l = 1) {
             *this = (*this) * (l / norm());
             return *this;
+        }
+        vec<3,T> &normalize() const{
+            vec<3,T> res(*this) ;
+            res = res * (1 / this->norm());
+            return res ;
         }
     };
 
@@ -215,16 +245,18 @@ namespace Vec {
 /////////////////////////
 
     template<size_t DIM, typename T, typename U>
-    vec<DIM, T> operator*(vec<DIM, T> lhs, const U &rhs) {
-        for (size_t i = DIM; i--; lhs[i] *= rhs);
-        return lhs;
+    vec<DIM, T> operator*(const vec<DIM, T> lhs, const U &rhs) {
+        vec<DIM,T> res ;
+        for (size_t i = DIM; i--; res[i] = lhs[i] * rhs);
+        return res;
     }
 
 
     template<size_t DIM, typename T, typename U>
     vec<DIM, T> operator/(vec<DIM, T> lhs, const U &rhs) {
-        for (size_t i = DIM; i--; lhs[i] /= rhs);
-        return lhs;
+        vec<DIM,T> res ;
+        for (size_t i = DIM; i--; res[i] = lhs[i] / rhs);
+        return res;
     }
 
 
@@ -279,6 +311,27 @@ namespace Vec {
         vec<DimCols, T> rows[DimRows];
     public:
         mat() {}
+
+        explicit mat(float k)
+        {
+            for(int i = 0 ; i < DimRows; i++)
+            {
+                for(int j = 0 ; j < DimCols ; j++)
+                {
+                    rows[i][j] = k ;
+                }
+            }
+        }
+
+        mat(const mat<DimRows,DimCols,T>& ano) {
+            for(int i = 0 ; i < DimRows; i++)
+            {
+                for(int j = 0 ; j < DimCols ; j++)
+                {
+                    rows[i][j] = ano[i][j] ;
+                }
+            }
+        }
 
         vec<DimCols, T> &operator[](const size_t i) {
             assert(i < DimRows);
@@ -362,7 +415,7 @@ namespace Vec {
         inline int get_rows() { return DimRows; }
 
 
-        inline mat<DimCols, DimRows, T> &operator=(const mat<DimRows, DimCols, T> &rhs) {
+        inline mat<DimRows, DimCols, T> &operator=(const mat<DimRows, DimCols, T> &rhs) {
             if (this != &rhs) {
                 for (size_t i = DimRows; i--; (*this)[i] = rhs[i]);
             }
@@ -409,12 +462,13 @@ namespace Vec {
         return out;
     }
 
-    vec<3,float> min(vec<3,float> left, vec<3,float> right)
+    inline vec<3,float> min(vec<3,float> left, vec<3,float> right)
     {
         vec<3,float> result ;
         result[0] = std::min(left[0],right[0]) ;
         result[1] = std::min(left[1],right[1]) ;
         result[2] = std::min(left[2],right[2]) ;
+        return result ;
     }
 
 }

@@ -17,16 +17,17 @@ private:
 public:
     Model()
     {
-        modelMatrix[0][0] = 1.0f ;
-        modelMatrix[1][1] = 1.0f ;
-        modelMatrix[2][2] = 1.0f ;
-        modelMatrix[3][3] = 1.0f ;
+        modelMatrix = Matrix44::indentity() ;
     }
 
     Model(Vec3f center)
     {
-
+        modelMatrix = Matrix44::indentity() ;
+        Vec3f toCenterT = Vec3f(0.0) - center ;
+        manipulation::translation(modelMatrix,toCenterT) ;
     }
+
+    Matrix44 getMatrix() { return modelMatrix ; }
 
     void change(std::vector<Matrix41>& verts)
     {

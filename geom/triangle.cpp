@@ -96,20 +96,22 @@ void Triangle::draw_vec3f(TGAImage &image, vector<Vec3f>& points, TGAColor &colo
 }
 
 
+
 void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points,vector<Vec2i>& colorsPosition,Vec3f intensity,TGAImage& textImage)
 {
     Vec3i t1 = points[0];
     Vec3i t2 = points[1] ;
     Vec3i t3 = points[2];
 
-    Vec2i c1 = colorsPosition[0] ;
-    Vec2i c2 = colorsPosition[1] ;
-    Vec2i c3 = colorsPosition[2] ;
 
     float in1 = intensity[0] ;
     float in2 = intensity[1] ;
     float in3 = intensity[2] ;
 
+
+    Vec2i c1 = colorsPosition[0] ;
+    Vec2i c2 = colorsPosition[1] ;
+    Vec2i c3 = colorsPosition[2] ;
 
     if(t2.y < t1.y) {std::swap(t1,t2) ; std::swap(c1,c2) ; std::swap(in1,in2);}
     if(t1.y > t3.y) {std::swap(t1,t3) ; std::swap(c1,c3) ; std::swap(in1,in3);}

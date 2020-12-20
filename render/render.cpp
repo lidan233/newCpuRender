@@ -42,8 +42,8 @@ void Render::drawAll(TGAImage& image ,vector<TGAColor> v_c,vector<TGAColor> f_c,
         {
             t4.push_back(normal_v[face[i]]);
             intensity[i] = norms[i]*light_dir ;
-
         }
+
         vector<Vec2i> T_Texts  = getFaceVertexTexturePosition(i);
         int index3[3] = {0,1,2};
         Triangle d(index3) ;

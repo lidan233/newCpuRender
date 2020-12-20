@@ -3,7 +3,8 @@
 #include "Line.h"
 #include "render.h"
 #include "triangle.h"
-
+#include "camera.h"
+#include "pipline.h"
 
 const int width = 800;
 const int height = 800 ;
@@ -11,95 +12,88 @@ const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
 Vec3f light_dir = Vec3f(1,-1,1).normalize();
-Vec3f camera(0,0,3) ;
+Vec3f camera_pos(0,0,3) ;
 Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
 Vec3f up(0,1,0);
 
-int main(int argc, char** argv) {
+
+int main(int argc, char** argv )
+{
+
+    ObjLoader loader("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\cube.obj") ;
+    ObjData objData = loader.getData() ;
+    Vec3f centerM = loader.getCenter() ;
+
+    float yaw = NYAW ;
+    float pitch = NPITCH ;
+    camera ca(camera_pos,up,center,yaw,pitch) ;
+
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
+    TGAImage image1(width, height, TGAImage::RGB);
+    image1.set(0, 0, red);
 
-//	// i want to have the origin at the left bottom corner of the image
-//
-//
-//	Point* be = new Point(1,10) ;
-//	Point* end = new Point(10,1) ;
-//
-//    Line* ll1 = new Line(new Point(13, 20), new Point(80, 40));
-//    ll1->drawLine_with_bilv( image, white) ;
-//
-//    Line* ll2 = new Line(new Point(20, 13),new Point(100,40)) ;
-//    ll2->drawLine_with_bilv(image, red);
-//
-//    Line* ll3 = new Line(new Point(80, 40),new Point( 13, 20));
-//    ll3->drawLine_with_bilv( image, red);
-//
-//	Line* ll = new Line(be,end) ;
-////	ll->drawLine_cal_much(image,white) ;
-//	ll->drawLine_with_bilv(image,red) ;
+    Model model = Model(centerM) ;
+    View view = View(ca) ;
+    Project project = Project(ca,800,800,0.1,1000) ;
+    PipLine pipline = PipLine(model,view,project) ;
+    pipline.change(objData) ;
 
+    for(int i = 0 ; i < objData.verts_.size(); i++)
+    {
+        std::cout<<objData.verts_[i]<<std::endl;
+    }
 
+    ZBuffer* zBuffer = new ZBuffer(image.get_height(),image.get_width()) ;
 
+    srand(time(NULL) ) ;
+    int size = objData.faces_.size() ;
+    for(int i = 0; i< size;i++)
+    {
+        Vec3i face = objData.faces_[i] ;
+        vector<Vec3i> t4 ;
+        vector<Vec2i> texture ;
+        Vec3f intensity;
 
-//
-//    ModelAndView a = ModelAndView("/Users/lidan/Desktop/软光栅/tinyrender/testData/lidan.obj") ;
-//    vector<TGAColor> one ;
-//    vector<TGAColor> two ;
-//    a.normal(800,800);
-//    a.drawAll(image, one ,two) ;
+        Vec3i idx_v = objData.idxNorm_[i] ;
+        vector<Vec3f> norms ;
+        for(int j =0 ;j <3 ;j++)
+        {
+            Vec3f temp = objData.norms[idx_v[j]] ;
+            norms.push_back(temp.normalize()) ;
+        }
 
-
-//    vector<Vec3f*> t1 ;
-//    t1.push_back(new Vec3f(10,70,10));
-//    t1.push_back(new Vec3f(50,160,10));
-//    t1.push_back(new Vec3f(70, 500,10));
-//
-//
-//    float* z_buffer = new float[image.get_width()*image.get_height()] ;
-//    for(int i = image.get_width()*image.get_height();i--;z_buffer[i] = -std::numeric_limits<float>::max()) ;
-//
-//    int index[3] = {0,1,2};
-//    Triangle a(index) ;
-//    a.draw(image, z_buffer,t1, const_cast<TGAColor &>(red)) ;
-
-/*
-    vector<Vec3f> t2 ;
-    t2.push_back(Vec3f(140,140,10));
-    t2.push_back(Vec3f(50,160,10));
-    t2.push_back(Vec3f(70, 80,10));
-    int index1[3] = {0,1,2};
-    Triangle b(index1) ;
-    b.draw(image, t2, const_cast<TGAColor &>(white)) ;
-    vector<Vec3f> t3 ;
-    t3.push_back(Vec3f(180,140,10));
-    t3.push_back(Vec3f(70,160,10));
-    t3.push_back(Vec3f(70, 80,10));
-    int index2[3] = {0,1,2};
-    Triangle c(index2) ;
-    c.draw(image, t3, const_cast<TGAColor &>(green)) ;
-    vector<Vec3f*> t4 ;
-    t4.push_back(new Vec3f(160,160,10));
-    t4.push_back(new Vec3f(270,160,10));
-    t4.push_back(new Vec3f(160, 80,10));
-    int index3[3] = {0,1,2};
-    Triangle d(index3) ;
-    c.draw(image, t4, const_cast<TGAColor &>(green)) ;
-*/
+        for(int i = 0; i< 3;i++)
+        {
+            t4.push_back(objData.verts_[face[i]]);
+            texture.push_back(Vec2i(0,0)) ;
+            intensity[i] = norms[i]*light_dir ;
+        }
 
 
+        int index3[3] = {0,1,2};
+        Triangle d(index3) ;
+        d.draw_vec3i(image,*zBuffer, t4,texture,intensity,image1 ) ;
+    }
+    image1.flip_vertically();
+    image1.write_tga_file("output1.tga");
+
+}
+
+int main1(int argc, char** argv) {
+    TGAImage image(width, height, TGAImage::RGB);
+    image.set(0, 0, red);
 
     Render a = Render("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\obj\\african_head\\african_head.obj") ;
     a.addTexture("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\obj\\african_head\\african_head_diffuse.tga") ;
     vector<TGAColor> one ;
     vector<TGAColor> two ;
-    a.setcamera(camera) ;
+    a.setcamera(camera_pos) ;
     a.normal(800,800,center,eye,up);
     a.drawAll(image, one ,two,light_dir) ;
 
-
     image.flip_vertically();
-
     image.write_tga_file("output.tga");
     return 0;
 }

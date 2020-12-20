@@ -6,19 +6,20 @@
 #define NEWCPURENDER_VIEW_H
 
 #include "Vec.h"
+#include "camera.h"
+
 
 class View{
 private:
     Matrix44 viewMatrix ;
 
 public:
-    View()
+    View(camera& ca)
     {
-        viewMatrix[0][0] = 1.0f ;
-        viewMatrix[1][1] = 1.0f ;
-        viewMatrix[2][2] = 1.0f ;
-        viewMatrix[3][3] = 1.0f ;
+        viewMatrix = ca.GetViewMatrix() ;
     }
+
+
     void change(std::vector<Matrix41>& verts)
     {
         for(int i = 0 ; i < verts.size(); i++)
@@ -26,6 +27,7 @@ public:
             verts[i] = viewMatrix*verts[i] ;
         }
     }
+    Matrix44 getMatrix() { return viewMatrix ; }
 };
 
 #endif //NEWCPURENDER_VIEW_H
