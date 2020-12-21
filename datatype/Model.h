@@ -25,6 +25,7 @@ public:
         modelMatrix = Matrix44::indentity() ;
         Vec3f toCenterT = Vec3f(0.0) - center ;
         manipulation::translation(modelMatrix,toCenterT) ;
+//        modelMatrix = manipulation::rotate(modelMatrix,45,Vec3f(0,0,0)) ;
     }
 
     Matrix44 getMatrix() { return modelMatrix ; }

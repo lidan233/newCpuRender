@@ -118,7 +118,7 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
     if(t2.y > t3.y) {std::swap(t2,t3) ; std::swap(c2,c3) ; std::swap(in2,in3);}
 
 
-
+    int count = 0 ;
     int total_height = t3.y-t1.y ;
     for(int i = 0 ;i< total_height;i++)
     {
@@ -153,8 +153,8 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
             {
                 zbuffer[P.x][P.y] = P.z ;
                 TGAColor color = textImage.get(uvP.x,uvP.y) ;
-
                 image.set(P.x,P.y,color*inP) ;
+                count++ ;
 //                std::cout<<inP ;
 //                std::cout<<P.x<<" "<<P.y<<" "<<int(color.bgra[0]*inP)<<int(color.bgra[1]*inP)<<int(color.bgra[2]*inP)<<std::endl ;
 //                std::cout<<P.x<<" "<<P.y<<" "<<int(color.bgra[0])<<int(color.bgra[1])<<int(color.bgra[2])<<std::endl ;
@@ -163,6 +163,7 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
             }
         }
 
+        std::cout<<"render triangle "<<points[0]<<" "<<points[1]<<" "<<points[2]<<std::endl ;
 
     }
 }

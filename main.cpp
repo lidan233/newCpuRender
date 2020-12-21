@@ -6,21 +6,22 @@
 #include "camera.h"
 #include "pipline.h"
 
+#include <glm/gtx/string_cast.hpp>
+
 const int width = 800;
 const int height = 800 ;
 const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
-Vec3f light_dir = Vec3f(1,-1,1).normalize();
+//Vec3f light_dir = Vec3f(1,-1,1).normalize();
 Vec3f camera_pos(0,0,3) ;
 Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
 Vec3f up(0,1,0);
-
+Vec3f light_dir = camera_pos - center ;
 
 int main(int argc, char** argv )
 {
-
     ObjLoader loader("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\cube.obj") ;
     ObjData objData = loader.getData() ;
     Vec3f centerM = loader.getCenter() ;
@@ -37,7 +38,10 @@ int main(int argc, char** argv )
     Model model = Model(centerM) ;
     View view = View(ca) ;
     Project project = Project(ca,800,800,0.1,1000) ;
-    PipLine pipline = PipLine(model,view,project) ;
+    ViewPort viewport = ViewPort(800,800) ;
+
+//    Matrix44 viewport = manipulation::viewport(width/8,height/8,width*3/4,height*3/4,255) ;
+    PipLine pipline = PipLine(model,view,project,viewport) ;
     pipline.change(objData) ;
 
     for(int i = 0 ; i < objData.verts_.size(); i++)
@@ -71,14 +75,13 @@ int main(int argc, char** argv )
             intensity[i] = norms[i]*light_dir ;
         }
 
-
         int index3[3] = {0,1,2};
         Triangle d(index3) ;
-        d.draw_vec3i(image,*zBuffer, t4,texture,intensity,image1 ) ;
+        d.draw_vec3i(image1,*zBuffer, t4,texture,intensity,image1 ) ;
     }
     image1.flip_vertically();
     image1.write_tga_file("output1.tga");
-
+    return 0 ;
 }
 
 int main1(int argc, char** argv) {

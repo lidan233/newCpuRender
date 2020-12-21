@@ -110,7 +110,6 @@ Matrix44 manipulation::projection(float camera){
 Matrix44 manipulation::lookAt(Vec3f eye,Vec3f center ,Vec3f up)
 {
     //左手系 右手系可以改为center-eye 其他不用动
-    Vec3f shit = eye - center ;
     Vec3f z = (eye-center).normalize() ;
     Vec3f x = cross(up,z).normalize() ;
     Vec3f y = cross(z,x).normalize() ;
@@ -147,7 +146,7 @@ Matrix44 manipulation::lookAtMatrix( Vec3f const & eye, Vec3f const & center, Ve
     res[3][0] =-(s * eye);
     res[3][1] =-(u * eye);
     res[3][2] =(f * eye);
-    return res;
+    return res.transpose();
 }
 
 Matrix44 manipulation::rotate(Matrix44 const & m,float angle,Vec3f const & v)
@@ -178,7 +177,7 @@ Matrix44 manipulation::rotate(Matrix44 const & m,float angle,Vec3f const & v)
     Result[1] = m[0] * Rotate[1][0] + m[1] * Rotate[1][1] + m[2] * Rotate[1][2];
     Result[2] = m[0] * Rotate[2][0] + m[1] * Rotate[2][1] + m[2] * Rotate[2][2];
     Result[3] = m[3];
-    return Result;
+    return Result.transpose();
 }
 
 Matrix44 manipulation::perspective(float fovy, float aspect, float zNear, float zFar)
@@ -193,7 +192,7 @@ Matrix44 manipulation::perspective(float fovy, float aspect, float zNear, float 
     Result[2][2] = - (zFar + zNear) / (zFar - zNear);
     Result[2][3] = - static_cast<float>(1);
     Result[3][2] = - (static_cast<float>(2) * zFar * zNear) / (zFar - zNear);
-    return Result;
+    return Result.transpose();
 }
 
 

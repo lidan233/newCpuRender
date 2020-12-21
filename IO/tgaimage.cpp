@@ -256,6 +256,7 @@ bool TGAImage::set(int x, int y, TGAColor &c) {
     if (!data || x<0 || y<0 || x>=width || y>=height) {
         return false;
     }
+//    std::cout<<x<<" "<<y<<" "<<int(c.bgra[0])<<" "<<int(c.bgra[1])<<" "<<int(c.bgra[2])<<" "<<std::endl ;
     memcpy(data+(x+y*width)*bytespp, c.bgra, bytespp);
     return true;
 }
@@ -264,6 +265,7 @@ bool TGAImage::set(int x, int y, const TGAColor &c) {
     if (!data || x<0 || y<0 || x>=width || y>=height) {
         return false;
     }
+//    std::cout<<x<<" "<<y<<" "<<int(c.bgra[0])<<" "<<int(c.bgra[1])<<" "<<int(c.bgra[2])<<" "<<std::endl ;
     memcpy(data+(x+y*width)*bytespp, c.bgra, bytespp);
     return true;
 }

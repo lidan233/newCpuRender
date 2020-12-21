@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "View.h"
 #include "Project.h"
+#include "ViewPort.h"
 #include "Vec.h"
 
 #include <vector>
@@ -18,22 +19,25 @@ private:
     Matrix44 model_ ;
     Matrix44 view_ ;
     Matrix44 project_ ;
+    Matrix44 viewport_ ;
 
 public:
-    PipLine( Model& model, View& view, Project& project)
+    PipLine( Model& model, View& view, Project& project, ViewPort& viewPort)
     {
         model_ = model.getMatrix() ;
         view_ = view.getMatrix() ;
         project_ = project.getMatrix() ;
+        viewport_ = viewPort.getMatrix() ;
     }
 
     void change(ObjData& objData)
     {
-        Matrix44 result = project_*view_*model_ ;
-        std::cout<<"model "<<model_ ;
-        std::cout<<"view "<<view_ ;
-        std::cout<<"project "<<project_ ;
-        std::cout<<"result "<<result ;
+
+        Matrix44 result = viewport_*project_*view_*model_ ;
+//        std::cout<<"model "<<model_ ;
+//        std::cout<<"view "<<view_ ;
+//        std::cout<<"project "<<project_ ;
+//        std::cout<<"result "<<result ;
 
         for(int i = 0 ;i< objData.verts_.size();i++)
         {

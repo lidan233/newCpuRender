@@ -83,7 +83,7 @@ public:
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     Matrix44 GetViewMatrix()
     {
-        return manipulation::lookAt(Position, Position + Front, Up);
+        return manipulation::lookAtMatrix(Position, Position + Front, Up);
     }
 
 

@@ -67,5 +67,5 @@ include_directories(
         )
 
 
-add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp render/render.cpp render/render.h IO/ObjLoader.cpp IO/ObjLoader.h datatype/pipline.h)
+add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp render/render.cpp render/render.h IO/ObjLoader.cpp IO/ObjLoader.h datatype/pipline.h datatype/ViewPort.h)
 
