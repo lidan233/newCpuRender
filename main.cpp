@@ -73,7 +73,9 @@ int main(int argc, char** argv )
             t4.push_back(objData.verts_[face[i]]);
             texture.push_back(Vec2i(0,0)) ;
             intensity[i] = norms[i]*light_dir ;
+
         }
+        std::cout<<"face "<< face[0]<<" " << face[1]<<" " <<face[2]<<" " << light_dir<<" " << intensity<<" " <<std::endl ;
 
         int index3[3] = {0,1,2};
         Triangle d(index3) ;
