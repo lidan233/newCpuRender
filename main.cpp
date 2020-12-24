@@ -5,6 +5,7 @@
 #include "triangle.h"
 #include "camera.h"
 #include "pipline.h"
+#include "window.h"
 
 #include <glm/gtx/string_cast.hpp>
 
@@ -14,14 +15,18 @@ const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
 //Vec3f light_dir = Vec3f(1,-1,1).normalize();
-Vec3f camera_pos(0,0,3) ;
+Vec3f camera_pos(2,2,3) ;
 Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
-Vec3f up(0,1,0);
+Vec3f up(0,-3,2);
 Vec3f light_dir = camera_pos - center ;
 
+#ifdef __cplusplus
+extern "C"
+#endif
 int main(int argc, char** argv )
 {
+    srand(time(NULL)) ;
     ObjLoader loader("../testData/cube.obj") ;
     ObjData objData = loader.getData() ;
     Vec3f centerM = loader.getCenter() ;
@@ -32,7 +37,7 @@ int main(int argc, char** argv )
 
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
-    TGAImage image1(width, height, TGAImage::RGB);
+    TGAImage image1(width, height, TGAImage::RGBA);
     image1.set(0, 0, red);
 
     Model model = Model(centerM) ;
@@ -61,7 +66,7 @@ int main(int argc, char** argv )
     for(int i = 0; i< size;i++)
     {
         Vec3i face = objData.faces_[i] ;
-        vector<Vec3i> t4 ;
+        vector<Vec3f> t4 ;
         vector<Vec2i> texture ;
         Vec3f intensity;
 
@@ -80,14 +85,18 @@ int main(int argc, char** argv )
             intensity[i] = norms[i]*light_dir ;
 
         }
-        std::cout<<"face "<< face[0]<<" " << face[1]<<" " <<face[2]<<" " << light_dir<<" " << intensity<<" " <<std::endl ;
+//        std::cout<<"face "<< face[0]<<" " << face[1]<<" " <<face[2]<<" " << light_dir<<" " << intensity<<" " <<std::endl ;
 
         int index3[3] = {0,1,2};
         Triangle d(index3) ;
-        d.draw_vec3i(image1,*zBuffer, t4,texture,intensity,image ) ;
+
+        d.draw(image1,*zBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],image ) ;
     }
     image1.flip_vertically();
     image1.write_tga_file("output1.tga");
+
+    Window window(height,width,reinterpret_cast<Uint32*>(image1.buffer())) ;
+    window.render(reinterpret_cast<Uint32*>(image1.buffer())) ;
     return 0 ;
 }
 

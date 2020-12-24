@@ -63,11 +63,17 @@ include_directories(
 #        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googlemock/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/cxxopts/include"
         "${CMAKE_CURRENT_BINARY_DIR}/config/"
-        /usr/local/Cellar/sdl2/2.0.9_1/include
         )
 
-link_directories(/usr/local/Cellar/sdl2/2.0.9_1/lib)
+IF (WIN32)
+    include_directories(external/SDL/lib-vc2019/include/)
+    link_directories(external/SDL/lib-vc2019/lib/x64)
+    message(STATUS "using windows external")
+else()
+    include_directories(/usr/local/Cellar/sdl2/2.0.9_1/include/)
+    link_directories(/usr/local/Cellar/sdl2/2.0.9_1/lib)
+endif()
 
 
-add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp render/render.cpp render/render.h IO/ObjLoader.cpp IO/ObjLoader.h datatype/pipline.h datatype/ViewPort.h)
+add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp )
 target_link_libraries(newCpuRender SDL2)

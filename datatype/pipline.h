@@ -34,6 +34,7 @@ public:
     {
 
         Matrix44 result = viewport_*project_*view_*model_ ;
+//        Matrix44 result = project_*view_*model_ ;
         std::cout<<"model "<<model_ ;
         std::cout<<"view "<<view_ ;
         std::cout<<"project "<<project_ ;

@@ -3,6 +3,9 @@
 #include <string.h>
 #include <time.h>
 #include <math.h>
+#include <random>
+#include <stdlib.h>
+
 #include "tgaimage.h"
 
 TGAImage::TGAImage() : data(NULL), width(0), height(0), bytespp(0) {
@@ -254,8 +257,7 @@ TGAColor TGAImage::get(int x, int y) {
 
 TGAColor TGAImage::getRandomColor()
 {
-    srand(time(NULL)) ;
-    return TGAColor( rand()%255, random()%255, random()%255)  ;
+    return TGAColor( rand()%255, rand()%255, rand()%255)  ;
 }
 
 

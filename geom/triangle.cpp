@@ -155,7 +155,7 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
 //            std::cout<<"inP is "<<inP<<std::endl ;
 //            int idx =  P.x+P.y*image.get_width() ;
             if(P.x>=image.get_width()||P.y>=image.get_height()||P.x<0||P.y<0) continue ;
-            if(zbuffer[P.x][P.y]<P.z)
+            if(zbuffer[P.x][P.y]>P.z)
             {
                 zbuffer[P.x][P.y] = P.z ;
                 TGAColor color = textImage.get(uvP.x,uvP.y) ;
@@ -187,6 +187,8 @@ void Triangle::draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vecto
     temp.push_back(new Point(points[points_i[1]].x,points[points_i[1]].y)) ;
     temp.push_back(new Point(points[points_i[2]].x,points[points_i[2]].y)) ;
 
+    // test
+    TGAColor color1 = textImage.getRandomColor() ;
 
     Vec3f p ;
     for(p.x = xmin.x;p.x<=xmax.x ;p.x++)
@@ -205,10 +207,11 @@ void Triangle::draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vecto
 
             p.z = 0 ;
             for(int i = 0; i<3 ;i++) p.z += points[points_i[i]].z*bscreen[i];
-            if(zbuffer[int(p.x)][int(p.y)]<p.z)
+            if(zbuffer[int(p.x)][int(p.y)]>p.z)
             {
                 zbuffer[int(p.x)][int(p.y)] = p.z ;
-                image.set(p.x,p.y,multiply(temp,intensity)) ;
+//                image.set(p.x,p.y,multiply(color1,intensity)) ;
+                image.set(p.x,p.y,color1) ;
             }
 
         }
