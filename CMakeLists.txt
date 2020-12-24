@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.14)
 project(newCpuRender LANGUAGES C CXX)
 
@@ -64,8 +63,11 @@ include_directories(
 #        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googlemock/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/cxxopts/include"
         "${CMAKE_CURRENT_BINARY_DIR}/config/"
+        /usr/local/Cellar/sdl2/2.0.9_1/include
         )
+
+link_directories(/usr/local/Cellar/sdl2/2.0.9_1/lib)
 
 
 add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp render/render.cpp render/render.h IO/ObjLoader.cpp IO/ObjLoader.h datatype/pipline.h datatype/ViewPort.h)
-
+target_link_libraries(newCpuRender SDL2)

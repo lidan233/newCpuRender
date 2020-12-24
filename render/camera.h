@@ -142,6 +142,11 @@ private:
         Right = (cross(Front, WorldUp)).normalize() ;  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up    = (cross(Right, Front)).normalize() ;
         Position = Target - radius * Front ;
+
+        std::cout<<"Position "<< Position<<std::endl ;
+        std::cout<<"Front "<< Front<< std::endl ;
+        std::cout<<"Right "<< Right <<std::endl ;
+        std::cout<<"Up "<<Up<<std::endl ;
     }
 
 };

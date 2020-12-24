@@ -252,6 +252,13 @@ TGAColor TGAImage::get(int x, int y) {
     return TGAColor(data+(x+y*width)*bytespp, bytespp);
 }
 
+TGAColor TGAImage::getRandomColor()
+{
+    srand(time(NULL)) ;
+    return TGAColor( rand()%255, random()%255, random()%255)  ;
+}
+
+
 bool TGAImage::set(int x, int y, TGAColor &c) {
     if (!data || x<0 || y<0 || x>=width || y>=height) {
         return false;

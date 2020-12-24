@@ -22,7 +22,7 @@ Vec3f light_dir = camera_pos - center ;
 
 int main(int argc, char** argv )
 {
-    ObjLoader loader("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\cube.obj") ;
+    ObjLoader loader("../testData/cube.obj") ;
     ObjData objData = loader.getData() ;
     Vec3f centerM = loader.getCenter() ;
 
@@ -40,14 +40,19 @@ int main(int argc, char** argv )
     Project project = Project(ca,800,800,0.1,1000) ;
     ViewPort viewport = ViewPort(800,800) ;
 
+//    for(int i = 0 ; i < objData.verts_.size(); i++)
+//    {
+//        std::cout<<"this vertex i "<<objData.verts_[i]<<std::endl;
+//    }
+
 //    Matrix44 viewport = manipulation::viewport(width/8,height/8,width*3/4,height*3/4,255) ;
     PipLine pipline = PipLine(model,view,project,viewport) ;
     pipline.change(objData) ;
 
-    for(int i = 0 ; i < objData.verts_.size(); i++)
-    {
-        std::cout<<objData.verts_[i]<<std::endl;
-    }
+//    for(int i = 0 ; i < objData.verts_.size(); i++)
+//    {
+//        std::cout<<"this vertex i "<<objData.verts_[i]<<std::endl;
+//    }
 
     ZBuffer* zBuffer = new ZBuffer(image.get_height(),image.get_width()) ;
 
@@ -79,7 +84,7 @@ int main(int argc, char** argv )
 
         int index3[3] = {0,1,2};
         Triangle d(index3) ;
-        d.draw_vec3i(image1,*zBuffer, t4,texture,intensity,image1 ) ;
+        d.draw_vec3i(image1,*zBuffer, t4,texture,intensity,image ) ;
     }
     image1.flip_vertically();
     image1.write_tga_file("output1.tga");

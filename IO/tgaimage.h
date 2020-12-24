@@ -95,6 +95,7 @@ public:
     bool flip_vertically();
     bool scale(int w, int h);
     TGAColor get(int x, int y);
+    TGAColor getRandomColor() ;
     bool set(int x, int y, TGAColor &c);
     bool set(int x, int y, const TGAColor &c);
     ~TGAImage();

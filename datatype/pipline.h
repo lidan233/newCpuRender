@@ -34,17 +34,18 @@ public:
     {
 
         Matrix44 result = viewport_*project_*view_*model_ ;
-//        std::cout<<"model "<<model_ ;
-//        std::cout<<"view "<<view_ ;
-//        std::cout<<"project "<<project_ ;
-//        std::cout<<"result "<<result ;
+        std::cout<<"model "<<model_ ;
+        std::cout<<"view "<<view_ ;
+        std::cout<<"project "<<project_ ;
+        std::cout<<"project "<<viewport_ ;
+        std::cout<<"result "<<result ;
 
         for(int i = 0 ;i< objData.verts_.size();i++)
         {
+            std::cout<<" change point from"<<objData.verts_[i]<<std::endl ;
             Matrix41 screen = manipulation::v2m(objData.verts_[i]) ;
-            std::cout<<screen<<std::endl ;
             objData.verts_[i] = manipulation::m2v(result*screen) ;
-            std::cout<<objData.verts_[i]<<std::endl ;
+            std::cout<<" change point to"<<objData.verts_[i]<<std::endl ;
         }
     }
 

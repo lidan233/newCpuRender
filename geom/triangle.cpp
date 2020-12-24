@@ -118,6 +118,10 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
     if(t2.y > t3.y) {std::swap(t2,t3) ; std::swap(c2,c3) ; std::swap(in2,in3);}
 
 
+    // test
+    TGAColor color1 = textImage.getRandomColor() ;
+
+
     int count = 0 ;
     int total_height = t3.y-t1.y ;
     std::cout<<"render triangle "<<points[0]<<" "<<points[1]<<" "<<points[2]<<std::endl ;
@@ -155,11 +159,12 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
             {
                 zbuffer[P.x][P.y] = P.z ;
                 TGAColor color = textImage.get(uvP.x,uvP.y) ;
-                image.set(P.x,P.y,color) ;
+
+                image.set(P.x,P.y,color1) ;
                 count++ ;
 
-//                std::cout<<P.x<<" "<<P.y<<" "<<int(color.bgra[0]*inP)<<int(color.bgra[1]*inP)<<int(color.bgra[2]*inP)<<std::endl ;
-//                std::cout<<P.x<<" "<<P.y<<" "<<int(color.bgra[0])<<int(color.bgra[1])<<int(color.bgra[2])<<std::endl ;
+//                std::cout<<"using color "<<P.x<<" "<<P.y<<" "<<int(color.bgra[0]*inP)<<int(color.bgra[1]*inP)<<int(color.bgra[2]*inP)<<std::endl ;
+//                std::cout<<"using color "<<P.x<<" "<<P.y<<" "<<int(color.bgra[0])<<int(color.bgra[1])<<int(color.bgra[2])<<std::endl ;
 //                image.set(P.x,P.y,TGAColor((unsigned char)(color.r),(unsigned char)(color.g),(unsigned char)(color.b))) ;
 //                image.set(P.x,P.y,TGAColor((unsigned char)(255*intensity),(unsigned char)(255*intensity),(unsigned char)(255*intensity))) ;
             }

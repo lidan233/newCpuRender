@@ -481,8 +481,8 @@ typedef Vec::vec<2,  int>   Vec2i;
 typedef Vec::vec<3,  float> Vec3f;
 typedef Vec::vec<3,  int>   Vec3i;
 typedef Vec::vec<4,  float> Vec4f;
-typedef Vec::mat<4,4,float> Matrix44;
-typedef Vec::mat<4,1,float> Matrix41;
+typedef Vec::mat<4,4,double> Matrix44;
+typedef Vec::mat<4,1,double> Matrix41;
 
 
 

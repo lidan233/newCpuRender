@@ -25,6 +25,7 @@ public:
             for(int j = 0 ; j < W ; j++)
             {
                 zbuffer[i][j] = std::numeric_limits<Doub>::min() ;
+//                zbuffer[i][j] = std::numeric_limits<Doub>::max() ;
             }
         }
     }
