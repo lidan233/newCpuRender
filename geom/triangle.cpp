@@ -97,7 +97,7 @@ void Triangle::draw_vec3f(TGAImage &image, vector<Vec3f>& points, TGAColor &colo
 
 
 
-void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points,vector<Vec2i>& colorsPosition,Vec3f intensity,TGAImage& textImage)
+void Triangle::draw_vec3i(TGAImage& image,ZBuffer& zbuffer ,vector<Vec3i>& points,vector<Vec2i>& colorsPosition,Vec3f intensity,TGAImage& textImage)
 {
     Vec3i t1 = points[0];
     Vec3i t2 = points[1] ;
@@ -176,7 +176,7 @@ void Triangle::draw_vec3i(TGAImage& image,Buffer& zbuffer ,vector<Vec3i>& points
 
 
 
-void Triangle::draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition,float intensity ,TGAImage& textImage)
+void Triangle::draw(TGAImage& image,ZBuffer& zbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition,float intensity ,TGAImage& textImage)
 {
     std::pair<Vec2f,Vec2f> bound = getMBR( image,points_i,points) ;
     Vec2f xmin = bound.first ;
@@ -188,7 +188,8 @@ void Triangle::draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vecto
     temp.push_back(new Point(points[points_i[2]].x,points[points_i[2]].y)) ;
 
     // test
-    TGAColor color1 = textImage.getRandomColor() ;
+//    TGAColor color1 = textImage.getRandomColor() ;
+    TGAColor color1 = TGAColor(0,0,255) * intensity;
 
     Vec3f p ;
     for(p.x = xmin.x;p.x<=xmax.x ;p.x++)
@@ -217,4 +218,49 @@ void Triangle::draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vecto
         }
     }
 
+}
+
+void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition ,float intensity,TGAImage& textImage)
+{
+    std::pair<Vec3f,Vec3f> bound = getMBRD( image,points_i,points) ;
+    Vec2f xmin = Vec2f(bound.first[0],bound.first[1] ) ;
+    Vec2f xmax = Vec2f(bound.second[0],bound.second[1] ) ;
+
+    if(hzbuffer.canCoverBox(xmin,xmax,bound.second.z)==false) return ;
+
+
+    vector<Point*> temp ;
+    temp.push_back(new Point(points[points_i[0]].x,points[points_i[0]].y)) ;
+    temp.push_back(new Point(points[points_i[1]].x,points[points_i[1]].y)) ;
+    temp.push_back(new Point(points[points_i[2]].x,points[points_i[2]].y)) ;
+
+    // test
+//    TGAColor color1 = textImage.getRandomColor() ;
+    TGAColor color1 = TGAColor(0,0,255) * intensity;
+
+    Vec3f p ;
+    for(p.x = xmin.x;p.x<=xmax.x ;p.x++)
+    {
+        for(p.y=xmin.y;p.y<=xmax.y;p.y++)
+        {
+            Vec3f bscreen = barycentric(temp,new Point(p.x,p.y));
+            if(bscreen.x<0||bscreen.y<0||bscreen.z<0) continue ;
+
+            vector<TGAColor> colors  ;
+            for(int i = 0 ;i<colorsPosition.size();i++)
+            {
+                colors.push_back(textImage.get(colorsPosition[i][0],colorsPosition[i][1])) ;
+            }
+            TGAColor temp = interpolateColor(colors,bscreen) ;
+
+            p.z = 0 ;
+            for(int i = 0; i<3 ;i++) p.z += points[points_i[i]].z*bscreen[i];
+            if(hzbuffer.canCover(int(p.x),int(p.y),p.z))
+            {
+                hzbuffer.cover(int(p.x),int(p.y),p.z) ;
+                image.set(p.x,p.y,color1) ;
+            }
+
+        }
+    }
 }

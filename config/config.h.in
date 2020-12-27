@@ -1,0 +1,7 @@
+#cmakedefine USE_MYMATH
+
+#cmakedefine LOG 1
+#cmakedefine BLOCKSIZE 64
+#define processor_N "@processor_N@"
+#define CONDIF_DIR "@CONDIF_DIR@"
+#define APPENDDIR(NAME) CONDIF_DIR##NAME

@@ -31,7 +31,7 @@ private:
     bool useTexture = false ;
 
 //    ZBuffer* zBuffer ;
-    Buffer* zBuffer ;
+    ZBuffer* zBuffer ;
 
     int T_width ;
     int T_height ;

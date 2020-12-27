@@ -9,8 +9,12 @@
 #include <SDL.h>
 #include <SDL_audio.h>
 #include <iostream>
+#include <sstream>
 
+#include "Vec.h"
 #include "LTexture.h"
+
+
 
 class Window {
 private:
@@ -22,20 +26,14 @@ private:
     SDL_Rect end ;
     int _currentBuffer = 0 ;
     int _height, _width ;
+    int cursor_X ,cursor_Y ;
+    int cursor_X_offset=0, cursor_Y_offset = 0;
+    bool firstCursor = true ;
+    bool useCursor = true ;
+
 
 public:
-    void init_sdl()
-    {
-        if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-            printf("[Error] SDL Init : %s \n", SDL_GetError());
-        } else {
-            printf("SDL INITIALISED\n");
-            SDL_DisplayMode dm;
-            SDL_GetCurrentDisplayMode(0, &dm);
 
-            printf("Display mode is %dx%dpx @ %dhz\n", dm.w, dm.h, dm.refresh_rate);
-        }
-    }
 
 
     Window(int height, int width,Uint32* pixels)
@@ -67,21 +65,53 @@ public:
 
     }
 
-    void render(Uint32* data)
+    int render(Uint32* data)
     {
         if (SDL_Init( SDL_INIT_VIDEO ) < 0) {
             std::cout << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         } else {
-
-           while (1) {
+//           while (1) {
 
                 // event handling
                 SDL_Event e;
                 if ( SDL_PollEvent(&e) ) {
                     if (e.type == SDL_QUIT)
-                        break;
+                        return -1;
                     else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_ESCAPE)
-                        break;
+                        return -1;
+//                    else if (e.type==SDL_MOUSEBUTTONDOWN)
+//                    {
+//                        std::cout<<"push button"<<std::endl ;
+//                        useCursor = true ;
+//                    }
+                    else if(e.type==SDL_MOUSEMOTION)
+                    {
+
+                        std::cout<<useCursor<<std::endl ;
+                        if(useCursor)
+                        {
+                            int mouseX = e.motion.x;
+                            int mouseY = e.motion.y;
+                            if(firstCursor)
+                            {
+                                cursor_X = mouseX ;
+                                cursor_Y = mouseY ;
+                                firstCursor = false;
+                            }
+
+                            cursor_X_offset = cursor_X - mouseX ;
+                            cursor_Y_offset = cursor_Y - mouseY ;
+                            cursor_X = mouseX ;
+                            cursor_Y = mouseY ;
+//                            useCursor = false ;
+                        }
+
+
+//                        std::cout << "X offset: " << cursor_X_offset << " Y offset: " << cursor_Y_offset;
+//                        std::cout << "X: " << mouseX << " Y: " << mouseY;
+
+                    }
+
                 }
 
                 SDL_RenderClear(_render);
@@ -91,14 +121,47 @@ public:
                 _currentBuffer = !bool(_currentBuffer) ;
                 SDL_RenderPresent(_render);
 
-            }
-           delete texture[0] ;
-           delete texture[1] ;
-
-           SDL_DestroyRenderer(_render) ;
-           SDL_DestroyWindow(_window);
-           return ;
+//            }
+//           delete texture[0] ;
+//           delete texture[1] ;
+//
+//           SDL_DestroyRenderer(_render) ;
+//           SDL_DestroyWindow(_window);
+           return 0;
         }
+    }
+
+    void endrender()
+    {
+        delete texture[0] ;
+        delete texture[1] ;
+
+        SDL_DestroyRenderer(_render) ;
+        SDL_DestroyWindow(_window);
+    }
+
+    void init_sdl()
+    {
+        if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+            printf("[Error] SDL Init : %s \n", SDL_GetError());
+        } else {
+            printf("SDL INITIALISED\n");
+            SDL_DisplayMode dm;
+            SDL_GetCurrentDisplayMode(0, &dm);
+
+            printf("Display mode is %dx%dpx @ %dhz\n", dm.w, dm.h, dm.refresh_rate);
+        }
+    }
+
+    Vec2f getOffset()
+    {
+        Vec2f offset = Vec2f(0,0) ;
+        offset[0] = float(cursor_X_offset )/ float(_width )* 90.0;
+        offset[1] = float(cursor_Y_offset )/ float(_height )* 45.0;
+        cursor_X_offset = 0 ;
+        cursor_Y_offset = 0;
+        return offset ;
+
     }
 };
 

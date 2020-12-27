@@ -7,12 +7,17 @@ include(cmake/lidanBase.cmake)
 include(cmake/LidanBuild.cmake)
 
 
+SET(LOG 1)
+SET(ROOT_DIR ${CMAKE_SOURCE_DIR})
+set(CONDIF_DIR "${CMAKE_SOURCE_DIR}/")
+
 include(ProcessorCount)
 ProcessorCount(processor_N)
 if(NOT processor_N EQUAL 0)
     set(CTEST_BUILD_FLAGS -j${processor_N})
     set(ctest_test_args ${ctest_test_args} PARALLEL_LEVEL ${N})
 endif()
+
 
 configure_file (
         "${CMAKE_CURRENT_SOURCE_DIR}/config/config.h.in"
@@ -70,8 +75,9 @@ IF (WIN32)
     link_directories(external/SDL/lib-vc2019/lib/x64)
     message(STATUS "using windows external")
 else()
-    include_directories(/usr/local/Cellar/sdl2/2.0.9_1/include/)
+    include_directories(/usr/local/Cellar/sdl2/2.0.9_1/include/SDL2)
     link_directories(/usr/local/Cellar/sdl2/2.0.9_1/lib)
+    message(STATUS "using mac/linux external")
 endif()
 
 

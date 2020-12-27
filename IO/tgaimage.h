@@ -104,6 +104,7 @@ public:
     int get_height();
     int get_bytespp();
     unsigned char *buffer();
+
     void clear();
 };
 

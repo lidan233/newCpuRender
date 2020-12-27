@@ -9,6 +9,7 @@
 #include "tgaimage.h"
 #include "common.h"
 #include "ZBuffer.h"
+#include "HierachyZBuffer.h"
 
 #include <vector>
 #include <tuple>
@@ -20,9 +21,11 @@ private:
 public:
     Triangle(int index[3]);
     void draw_vec3f(TGAImage& image,vector<Vec3f>& points,TGAColor& color ) ;
-    void draw(TGAImage& image,Buffer& zbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition ,float intensity,TGAImage& textImage);
-    void draw_vec3i(TGAImage &image, Buffer& zbuffer, vector<Vec3i>& points, vector<Vec2i>& colorsPosition, Vec3f intensity,
+    void draw(TGAImage& image,ZBuffer& zbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition ,float intensity,TGAImage& textImage);
+    void draw_vec3i(TGAImage &image, ZBuffer& zbuffer, vector<Vec3i>& points, vector<Vec2i>& colorsPosition, Vec3f intensity,
                     TGAImage& textImage);
+
+    void draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition ,float intensity,TGAImage& textImage);
 };
 
 

@@ -208,6 +208,28 @@ inline std::pair<Vec2f,Vec2f> getMBR(TGAImage& image,int* points_i,vector<Vec3f>
     return make_pair(xmin,xmax) ;
 }
 
+
+inline std::pair<Vec3f,Vec3f> getMBRD(TGAImage& image,int* points_i,vector<Vec3f> points)
+{
+    Vec3f xmin(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()) ;
+    Vec3f xmax(-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max()) ;
+    Vec2f clamp(image.get_width()-1,image.get_height()-1) ;
+
+    for(int i = 0;i<3;i++)
+    {
+
+        xmin.x = std::max(0.0f,std::min(points[points_i[i]].x,(float)xmin[0])) ;
+        xmin.y = std::max(0.0f,std::min(points[points_i[i]].y,(float)xmin[1])) ;
+        xmin.z = std::max(0.0f,std::min(points[points_i[i]].z,(float)xmin[2])) ;
+        xmax.x = std::min((float)clamp[0],std::max((float)xmax[0],points[points_i[i]].x)) ;
+        xmax.y = std::min((float)clamp[1],std::max((float)xmax[1],points[points_i[i]].y)) ;
+        xmax.z = std::max((float)xmax.z,points[points_i[i]].z) ;
+    }
+
+
+    return make_pair(xmin,xmax) ;
+}
+
 inline TGAColor& multiply(TGAColor& from ,const float val)
 {
     TGAColor to ;
