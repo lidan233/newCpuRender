@@ -22,7 +22,7 @@ private:
     int minlevel ;
     ZBuffer** buffer = nullptr ;
 
-    bool canCoverBox_level(int level, Vec2f min, Vec2f max, int depth)
+    bool canRejectBox_level(int level, Vec2f min, Vec2f max, int depth)
     {
         if(level==0) return false ;
 
@@ -30,11 +30,11 @@ private:
         {
             for(int j = min[1] ; j< max[1]; j++)
             {
-                // 不能完全cover
+                // we can't reject
                 if((*(buffer[level]))[i][j] > depth) return false ;
             }
         }
-        //可以完全cover
+        //we can reject
         return true ;
     }
 
@@ -125,7 +125,9 @@ public:
 #endif
 
             (*(buffer[level+1]))[beginx/2][beginy/2] = result ;
+#ifdef  LOG
             std::cout<<"level "<<level+1<<"change "<<beginx/2<<" "<<beginy/2<<" using depth"<< result <<std::endl ;
+#endif
             coverReset( beginx/2, beginy/2 , level+1) ;
         }
     }
@@ -134,14 +136,15 @@ public:
     {
         if(canCover(x,y,depth)) {
             (*(buffer[0]))[x][y] = depth;
+#ifdef LOG
             std::cout<<"level "<<0<<"change "<<x<<" "<<y<<" using depth"<< depth <<std::endl ;
+#endif
             coverReset(x,y,0) ;
         }
     }
 
 
-
-    bool canCoverBox(Vec2f pmin, Vec2f pmax, float mindepth)
+    bool canRejectBox(Vec2f pmin, Vec2f pmax, float mindepth)
     {
         int count = minlevel-1 ;
         pmin = Vec2f(pmin[0]/begin_height[0],pmin[1]/begin_width[0]) ;
@@ -153,15 +156,16 @@ public:
             Vec2f p_min = Vec2f(pmin[0] * begin_height[count] , pmin[1] * begin_width[count] );
             Vec2f p_max = Vec2f(pmax[0] * begin_height[count] , pmax[1] * begin_width[count] );
 
-            // 如果不能完全cover
-            if(canCoverBox_level(count,pmin,pmax,mindepth)==false)
+            // If all buffer value is less than mindepth, so we can't write any value.
+            if(canRejectBox_level(count,pmin,pmax,mindepth)==true)
             {
-                // 那就是不能cover
-                return false;
+                return true;
             }
+            // else we test another level
             count--;
         }
-        return true;
+        // we can't reject box
+        return false;
     }
 
 };

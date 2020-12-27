@@ -7,7 +7,7 @@ include(cmake/lidanBase.cmake)
 include(cmake/LidanBuild.cmake)
 
 
-SET(LOG 1)
+SET(LOG 2)
 SET(ROOT_DIR ${CMAKE_SOURCE_DIR})
 set(CONDIF_DIR "${CMAKE_SOURCE_DIR}/")
 

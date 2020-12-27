@@ -1,6 +1,6 @@
 #cmakedefine USE_MYMATH
 
-#cmakedefine LOG 1
+//#cmakedefine LOG 1
 #cmakedefine BLOCKSIZE 64
 #define processor_N "@processor_N@"
 #define CONDIF_DIR "@CONDIF_DIR@"
