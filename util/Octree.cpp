@@ -35,7 +35,7 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
 //    std::vector<int> allfaces = node->getFaces() ;
     std::cout<<" my node has "<<allfaces.size()<<std::endl ;
     if(allfaces.size() < minisize) return &allfaces;
-    std::unique_ptr<BoundingBox>& rootbox = node->getBox() ;
+    std::unique_ptr<BoundingBox> rootbox(node->getBox()) ;
     Vec3f pmin = rootbox->getPmin() ;
     Vec3f pmax = rootbox->getPmax() ;
     Vec3f pmid = (pmin+pmax)/2.0 ;

@@ -170,8 +170,8 @@ int main(int argc, char** argv )
             // if this node is a leaf node, so we decided to render, else push as the iterator
             if(newNode->isLeafNode())
             {
-                BoundingBox t = newNode->
-                pipline.change()
+                BoundingBox* t = newNode->getBox() ;
+                BoundingBox* t1 = pipline.change(*t) ;
                 std::vector<int>* faces = newNode->getFaces() ;
                 for(int k = 0 ; k < faces->size(); k++)
                 {
