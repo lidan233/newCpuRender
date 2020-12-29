@@ -17,6 +17,17 @@ const int SCREEN_HEIGHT = 480;
 //Texture wrapper class
 class LTexture
 {
+private:
+    //The actual hardware texture
+    SDL_Renderer* _render ;
+    SDL_Texture* mTexture;
+    void* mPixels;
+    int mPitch;
+
+    //Image dimensions
+    int mWidth;
+    int mHeight;
+
 public:
     //Initializes variables
     LTexture(SDL_Renderer* render);
@@ -66,16 +77,7 @@ public:
     Uint32 getPixel32( unsigned int x, unsigned int y );
 
 
-private:
-    //The actual hardware texture
-    SDL_Renderer* _render ;
-    SDL_Texture* mTexture;
-    void* mPixels;
-    int mPitch;
 
-    //Image dimensions
-    int mWidth;
-    int mHeight;
 };
 
 

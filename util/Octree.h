@@ -7,34 +7,54 @@
 #include <vector>
 
 #include "BoundingBox.h"
+#include "common.h"
 
 struct OcNode{
-    int isLeaf = true ;
+private:
+    int isLeaf = false ;
     int id = -1 ;
     OcNode* children[8] = {nullptr} ;
     std::unique_ptr<BoundingBox> box = nullptr ;
-
-    OcNode() {}
+    std::vector<int>* faceid = nullptr;
+public:
     OcNode(int id, std::unique_ptr<BoundingBox>& b)
     {
         this->id = id ;
         this->box = std::move(b) ;
+//        this->faceid = faceid ;
     }
+    std::unique_ptr<BoundingBox>& getBox() { return box; }
+
+    std::vector<int>* getFaces() { return faceid ; }
+    void setFaces(std::vector<int>* faces) {
+        if(faces!=nullptr)
+        {
+            faceid = new std::vector<int>(*faces) ;
+            isLeaf = true ;
+        }
+    }
+
+    OcNode* getChild(int i) { return children[i] ; }
+    void setChild(OcNode* child, int i) { children[i] = child; }
+
+    bool isLeafNode() { return isLeaf; }
+    OcNode* getNext(int i, Vec3f viewdir) ;
 };
 
 class Octree {
 private:
     OcNode* root = nullptr;
     std::vector<OcNode*> nodes ;
-    int minsize = -1 ;
+    int minisize = 10 ;
 
-    void Build(const BoundingBox& box,int minsize);
+    void Build(const BoundingBox& box,ObjData& objdata,int minsize);
 public:
-    Octree(const BoundingBox& allvol, int minsize)
+    Octree(const BoundingBox& allvol, ObjData& objData, int minsize)
     {
-        Build(allvol,minsize);
+        Build(allvol,objData,minsize);
     }
 
+    OcNode* getRoot() { return root ; }
 };
 
 

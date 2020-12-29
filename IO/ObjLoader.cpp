@@ -20,7 +20,7 @@ ObjLoader::ObjLoader(std::string path)
             objdata.verts_.push_back(v);
             center = center + v ;
             pmin = Vec::min(v,pmin) ;
-            pmax = Vec::min(v,pmax) ;
+            pmax = Vec::max(v,pmax) ;
         }else if(!line.compare(0,3,"vt "))
         {
             Vec2f t;

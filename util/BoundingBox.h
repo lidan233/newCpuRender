@@ -5,7 +5,9 @@
 #ifndef HIERARCHYZBUFFER_BOUNDINGBOX_H
 #define HIERARCHYZBUFFER_BOUNDINGBOX_H
 
-#include <glm/glm.hpp>
+#include "Vec.h"
+
+
 #include <limits.h>
 #include <memory>
 
@@ -13,40 +15,40 @@
 
 class BoundingBox {
 private:
-    glm::dvec3 _pmin = glm::dvec3(std::numeric_limits<float>::max());
-    glm::dvec3 _pmax = glm::dvec3(std::numeric_limits<float>::min());
+    Vec3f _pmin = Vec3f(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max());
+    Vec3f _pmax = Vec3f(std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),std::numeric_limits<float>::min());
 public:
 
-    BoundingBox() {}
 
-    BoundingBox(glm::dvec3 pmin, glm::dvec3 pmax)
+    BoundingBox(Vec3f pmin, Vec3f pmax)
     {
         _pmin = pmin ;
         _pmax = pmax ;
     }
 
-    glm::dvec3 getPmin() const { return _pmin; }
-    glm::dvec3 getPmax() const { return _pmax; }
+    Vec3f getPmin() const { return _pmin; }
+    Vec3f getPmax() const { return _pmax; }
+    Vec3f getPmid() const { return (_pmin + _pmax)/2.0 ;}
 
     double getsize()
     {
-        glm::dvec3 size = _pmax - _pmin ;
+        Vec3f size = _pmax - _pmin ;
         return int(size[0]) * int(size[1]) * int(size[2]) ;
     }
 
     void merge(const BoundingBox& box)
 
     {
-        _pmin = glm::min(_pmin,box._pmin) ;
-        _pmax = glm::max(_pmax,box._pmax) ;
+        _pmin = min(_pmin,box._pmin) ;
+        _pmax = max(_pmax,box._pmax) ;
     }
 
     bool isInteract(const BoundingBox& box)
     {
-        glm::dvec3 newpmin = glm::max(box._pmin,_pmin) ;
-        glm::dvec3 newpmax = glm::min(box._pmax,_pmax) ;
+        Vec3f newpmin = max(box._pmin,_pmin) ;
+        Vec3f newpmax = min(box._pmax,_pmax) ;
 
-        glm::dvec3 vol = newpmax - newpmin ;
+        Vec3f vol = newpmax - newpmin ;
         if(vol[0]>=0 && vol[1]>=0 && vol[2]>=0)
         {
             return true ;
@@ -60,8 +62,8 @@ public:
     {
         if(this->isInteract(box))
         {
-            glm::dvec3 newpmin = glm::max(box._pmin,_pmin) ;
-            glm::dvec3 newpmax = glm::min(box._pmax,_pmax) ;
+            Vec3f newpmin = max(box._pmin,_pmin) ;
+            Vec3f newpmax = min(box._pmax,_pmax) ;
 
             BoundingBox* res1 = new BoundingBox(newpmin,newpmax) ;
             std::unique_ptr<BoundingBox> res(res1) ;
@@ -70,6 +72,7 @@ public:
 
         return nullptr ;
     }
+
 };
 
 

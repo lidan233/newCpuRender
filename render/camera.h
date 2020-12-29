@@ -128,6 +128,7 @@ public:
     }
 
     float getZoom(){ return Zoom; }
+    Vec3f getViewDir() { return Front ; }
 
 private:
 

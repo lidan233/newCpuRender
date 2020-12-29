@@ -226,7 +226,8 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
     Vec2f xmin = Vec2f(bound.first[0],bound.first[1] ) ;
     Vec2f xmax = Vec2f(bound.second[0],bound.second[1] ) ;
 
-    if(hzbuffer.canRejectBox(xmin,xmax,bound.second.z)==true) return  ;
+
+    if(hzbuffer.canRejectBox(xmin,xmax,bound.first.z)==true) return  ;
 
 
     vector<Point*> temp ;
