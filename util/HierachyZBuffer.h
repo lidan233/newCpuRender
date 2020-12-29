@@ -140,7 +140,9 @@ public:
             std::cout<<"level "<<0<<"change "<<x<<" "<<y<<" using depth"<< depth <<std::endl ;
 #endif
             coverReset(x,y,0) ;
+            return true ;
         }
+        return false ;
     }
 
 

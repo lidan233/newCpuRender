@@ -170,11 +170,14 @@ int main(int argc, char** argv )
             // if this node is a leaf node, so we decided to render, else push as the iterator
             if(newNode->isLeafNode())
             {
+                BoundingBox t = newNode->
+                pipline.change()
                 std::vector<int>* faces = newNode->getFaces() ;
                 for(int k = 0 ; k < faces->size(); k++)
                 {
                     Vec3i face = objData.faces_[(*faces)[k]] ;
                 }
+
 
             }else{
                 std::pair<OcNode*,int> t1 = std::pair<OcNode*,int>(newNode,0) ;

@@ -37,7 +37,7 @@ public:
 
 
 
-    void change(BoundingBox& boundingBox)
+    BoundingBox* change(BoundingBox& boundingBox)
     {
         Vec3f r_min = Vec3f(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max());
         Vec3f r_max = Vec3f(std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),std::numeric_limits<float>::min());
@@ -66,27 +66,28 @@ public:
         r_min = Vec::min(r_min,RLR) ;
         r_max = Vec::max(r_max,RLR) ;
 
-        Matrix41 t5 = manipulation::v2m(Vec3f(max[0],min[1],min[2]) ;
+        Matrix41 t5 = manipulation::v2m(Vec3f(max[0],min[1],min[2])) ;
         Vec3f RLL = manipulation::m2v(result*t5) ;
         r_min = Vec::min(r_min,RLL) ;
         r_max = Vec::max(r_max,RLL) ;
 
-        Matrix41 t6 = manipulation::v2m(Vec3f(min[0],max[1],max[2]) ;
+        Matrix41 t6 = manipulation::v2m(Vec3f(min[0],max[1],max[2])) ;
         Vec3f LRR = manipulation::m2v(result*t6) ;
         r_min = Vec::min(r_min,LRR) ;
         r_max = Vec::max(r_max,LRR) ;
 
-        Matrix41 t7 = manipulation::v2m(Vec3f(min[0],max[1],max[2]) ;
+        Matrix41 t7 = manipulation::v2m(Vec3f(min[0],max[1],max[2])) ;
         Vec3f RRL = manipulation::m2v(result*t7) ;
         r_min = Vec::min(r_min,RRL) ;
         r_max = Vec::max(r_max,RRL) ;
 
-        Matrix41 t8 = manipulation::v2m(Vec3f(max) ;
+        Matrix41 t8 = manipulation::v2m(Vec3f(max)) ;
         Vec3f RRR = manipulation::m2v(result*t8) ;
         r_min = Vec::min(r_min,RRR) ;
         r_max = Vec::max(r_max,RRR) ;
 
-
+        BoundingBox* result = new BoundingBox(r_min, r_max) ;
+        return result ;
     }
 
     void change(ObjData& objData)

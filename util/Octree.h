@@ -23,7 +23,9 @@ public:
         this->box = std::move(b) ;
 //        this->faceid = faceid ;
     }
-    std::unique_ptr<BoundingBox>& getBox() { return box; }
+    BoundingBox getBox() {
+        return BoundingBox(box->getPmin(), box->getPmax());
+    }
 
     std::vector<int>* getFaces() { return faceid ; }
     void setFaces(std::vector<int>* faces) {
