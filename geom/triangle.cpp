@@ -223,11 +223,14 @@ void Triangle::draw(TGAImage& image,ZBuffer& zbuffer ,vector<Vec3f>& points,vect
 void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,vector<Vec3f>& points,vector<Vec2i>& colorsPosition ,float intensity,TGAImage& textImage)
 {
     std::pair<Vec3f,Vec3f> bound = getMBRD( image,points_i,points) ;
-    Vec2f xmin = Vec2f(bound.first[0],bound.first[1] ) ;
-    Vec2f xmax = Vec2f(bound.second[0],bound.second[1] ) ;
+    Vec3f xmin = Vec3f(bound.first[0],bound.first[1],0 ) ;
+    Vec3f xmax = Vec3f(bound.second[0],bound.second[1],0) ;
 
 
-    if(hzbuffer.canRejectBox(xmin,xmax,bound.first.z)==true) return  ;
+    if(hzbuffer.canRejectBox(xmin,xmax,bound.first.z)==true) {
+        std::cout<<"reject triangle"<<std::endl ;
+        return  ;
+    }
 
 
     vector<Point*> temp ;

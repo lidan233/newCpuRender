@@ -45,11 +45,9 @@ private:
 
     float Yaw;
     float Pitch;
-
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
-
     float radius ;
 
 public:

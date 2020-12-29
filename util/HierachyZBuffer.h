@@ -146,11 +146,11 @@ public:
     }
 
 
-    bool canRejectBox(Vec2f pmin, Vec2f pmax, float mindepth)
+    bool canRejectBox(Vec3f pmin_, Vec3f pmax_, float mindepth)
     {
         int count = minlevel-1 ;
-        pmin = Vec2f(pmin[0]/begin_height[0],pmin[1]/begin_width[0]) ;
-        pmax = Vec2f(pmax[0]/begin_height[0],pmax[1]/begin_width[0]) ;
+        Vec2f pmin = Vec2f(pmin_[0]/begin_height[0],pmin_[1]/begin_width[0]) ;
+        Vec2f pmax = Vec2f(pmax_[0]/begin_height[0],pmax_[1]/begin_width[0]) ;
 
 
         for(int i = 0 ; i < minlevel-1 ; i++)

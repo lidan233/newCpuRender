@@ -172,12 +172,18 @@ int main(int argc, char** argv )
             {
                 BoundingBox* t = newNode->getBox() ;
                 BoundingBox* t1 = pipline.change(*t) ;
-                std::vector<int>* faces = newNode->getFaces() ;
-                for(int k = 0 ; k < faces->size(); k++)
-                {
-                    Vec3i face = objData.faces_[(*faces)[k]] ;
-                }
 
+                if(!hzBuffer->canRejectBox(t1->getPmin(),t1->getPmax(),t1->getPmin()[2]))
+                {
+
+                    std::vector<int>& allData = *(newNode->getFaces());
+                    for(int i = 0 ; i < allData.size() ; i++)
+                    {
+                        renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
+                    }
+                }else{
+                    std::cout<<"reject"<<std::endl ;
+                }
 
             }else{
                 std::pair<OcNode*,int> t1 = std::pair<OcNode*,int>(newNode,0) ;
@@ -185,17 +191,9 @@ int main(int argc, char** argv )
             }
         }
 
-
+        std::cout<<std::endl ;
 
         srand(time(NULL) ) ;
-        int size = objData.faces_.size() ;
-        for(int i = 0; i< size;i++)
-        {
-//            renderToImage(objData,image1,image,i,zBuffer) ;
-            renderToImageHZ(objData,image1,image,i,hzBuffer) ;
-        }
-//        image1.flip_vertically();
-//        image1.write_tga_file("output1.tga");
         long starttime = time(NULL) ;
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0)
             break ;
@@ -218,7 +216,7 @@ int main(int argc, char** argv )
 #ifdef __cplusplus
 extern "C"
 #endif
-int main3(int argc, char** argv )
+int main2(int argc, char** argv )
 {
     srand(time(NULL)) ;
     ObjLoader loader("../testData/cube.obj") ;
@@ -298,7 +296,7 @@ int main1(int argc, char** argv)
     buffer.cover(1,2,100) ;
 }
 
-int main2(int argc, char** argv) {
+int main3(int argc, char** argv) {
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
 
