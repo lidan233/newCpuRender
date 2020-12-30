@@ -33,14 +33,17 @@ void split(ObjData& data, std::vector<int>& fatherfaces,int splitDimension, floa
 std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& nodes, int minisize,std::vector<int>& allfaces)
 {
 //    std::vector<int> allfaces = node->getFaces() ;
-    std::cout<<" my node has "<<allfaces.size()<<std::endl ;
-    if(allfaces.size() < minisize) return &allfaces;
+//    std::cout<<" my node has "<<allfaces.size()<<std::endl ;
+
+    if(allfaces.size() <= minisize ) return &allfaces;
     std::unique_ptr<BoundingBox> rootbox(node->getBox()) ;
     Vec3f pmin = rootbox->getPmin() ;
     Vec3f pmax = rootbox->getPmax() ;
     Vec3f pmid = (pmin+pmax)/2.0 ;
     Vec3f size = pmax - pmin ;
 
+    if(size[0] * size[1] * size[2] < 4) { return &allfaces ;}
+    std::cout<<"split from "<<pmin<<" to "<<pmax<<" by "<<pmid <<std::endl ;
 
     std::vector<int> firstSplit_L ;
     std::vector<int> firstSplit_R ;
@@ -69,13 +72,13 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
 
 
     Vec3f beginLLL = pmin ;
-    Vec3f beginRLL = pmin + Vec3f(pmid[0],0,0) ;
-    Vec3f beginLRL = pmin + Vec3f(0,pmid[1],0) ;
-    Vec3f beginLLR = pmin + Vec3f(0,0,pmid[2]) ;
-    Vec3f beginRRL = pmin + Vec3f(pmid[0],pmid[1],0) ;
-    Vec3f beginRLR = pmin + Vec3f(pmid[0],0,pmid[2]) ;
-    Vec3f beginLRR = pmin + Vec3f(0,pmid[1],pmid[2] ) ;
-    Vec3f beginRRR = pmin + Vec3f(pmid[0],pmid[1],pmid[2]) ;
+    Vec3f beginRLL = Vec3f(pmid[0],pmin[1],pmin[2]) ;
+    Vec3f beginLRL = Vec3f(pmin[0],pmid[1],pmin[2]) ;
+    Vec3f beginLLR = Vec3f(pmin[0],pmin[1],pmid[2]) ;
+    Vec3f beginRRL = Vec3f(pmid[0],pmid[1],pmin[2]) ;
+    Vec3f beginRLR = Vec3f(pmid[0],pmin[1],pmid[2]) ;
+    Vec3f beginLRR = Vec3f(pmin[0],pmid[1],pmid[2]) ;
+    Vec3f beginRRR = pmid ;
 
     Vec3f vol = pmid - pmin ;
 
@@ -93,14 +96,14 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
     OcNode* node1 = new OcNode(nodes.size(),child1) ;
     node->setChild(node1,0) ;
     nodes.push_back(node1) ;
-    node1->setFaces(SplitFace(data,node1,nodes,minisize,thirdSplit_LLL) );
+    node1->setFaces(SplitFace(data,node1,nodes,minisize,thirdSplit_LLL) ) ;
 
     boxRLL = new BoundingBox(beginRLL,beginRLL+vol) ;
     std::unique_ptr<BoundingBox> child2(boxRLL) ;
     OcNode* node2 = new OcNode(nodes.size(),child2) ;
     node->setChild(node2,1) ;
     nodes.push_back(node2) ;
-    node2->setFaces(SplitFace(data,node2,nodes,minisize,thirdSplit_LLR) );
+    node2->setFaces(SplitFace(data,node2,nodes,minisize,thirdSplit_LLR) ) ;
 
     boxLRL = new BoundingBox(beginLRL,beginLRL+vol) ;
     std::unique_ptr<BoundingBox> child3(boxLRL) ;

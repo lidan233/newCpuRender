@@ -22,8 +22,10 @@ private:
     int minlevel ;
     ZBuffer** buffer = nullptr ;
 
-    bool canRejectBox_level(int level, Vec2f min, Vec2f max, int depth)
+    bool canRejectBox_level(int level, Vec2f min, Vec2f max, float depth)
     {
+        min = Vec::max(min,Vec2f(0.0,0.0)) ;
+        max = Vec::max(max,Vec2f(0.0,0.0)) ;
         if(level==0) return false ;
 
         for(int i = min[0] ; i < max[0] ; i++)
@@ -105,7 +107,7 @@ public:
 
     void coverReset( int x, int y, int level)
     {
-        if(level>=minlevel) { return; }
+        if(level>=(minlevel-1)) { return; }
         int beginx = floor(x/2.0)*2 ;
         int beginy = floor(y/2.0)*2 ;
         double result = std::numeric_limits<Doub>::min() ;
@@ -149,6 +151,11 @@ public:
     bool canRejectBox(Vec3f pmin_, Vec3f pmax_, float mindepth)
     {
         int count = minlevel-1 ;
+        if(pmax_[0]<0 || pmax_[1]<0  || pmin_[0]>begin_height[0] || pmin_[1]>begin_height[1] )
+        {
+            return true ;
+        }
+
         Vec2f pmin = Vec2f(pmin_[0]/begin_height[0],pmin_[1]/begin_width[0]) ;
         Vec2f pmax = Vec2f(pmax_[0]/begin_height[0],pmax_[1]/begin_width[0]) ;
 

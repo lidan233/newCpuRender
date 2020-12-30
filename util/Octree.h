@@ -23,10 +23,16 @@ public:
         this->box = std::move(b) ;
 //        this->faceid = faceid ;
     }
+
+    int getId() { return id ;}
     BoundingBox* getBox() {
         return new BoundingBox(box->getPmin(), box->getPmax());
     }
 
+    int getFaces_size() {
+        if(faceid== nullptr) return 0 ;
+        else return faceid->size() ;
+    }
     std::vector<int>* getFaces() { return faceid ; }
     void setFaces(std::vector<int>* faces) {
         if(faces!=nullptr)
@@ -41,6 +47,7 @@ public:
 
     bool isLeafNode() { return isLeaf; }
     OcNode* getNext(int i, Vec3f viewdir) ;
+
 };
 
 class Octree {

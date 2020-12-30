@@ -462,6 +462,23 @@ namespace Vec {
         return out;
     }
 
+
+    inline vec<2,float> min(vec<2,float> left, vec<2,float> right)
+    {
+        vec<2,float> result ;
+        result[0] = std::min(left[0],right[0]) ;
+        result[1] = std::min(left[1],right[1]) ;
+        return result ;
+    }
+    inline vec<2,float> max(vec<2,float> left, vec<2,float> right)
+    {
+        vec<2,float> result ;
+        result[0] = std::max(left[0],right[0]) ;
+        result[1] = std::max(left[1],right[1]) ;
+        return result ;
+    }
+
+
     inline vec<3,float> min(vec<3,float> left, vec<3,float> right)
     {
         vec<3,float> result ;

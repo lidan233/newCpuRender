@@ -19,10 +19,10 @@ const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
 //Vec3f light_dir = Vec3f(1,-1,1).normalize();
-Vec3f camera_pos(2,2,3) ;
+Vec3f camera_pos(0,0,50) ;
 Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
-Vec3f up(0,-3,2);
+Vec3f up(0,1,0);
 Vec3f light_dir = camera_pos - center ;
 
 #define NOLOG
@@ -45,6 +45,9 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
 
     for(int i = 0; i< 3;i++)
     {
+#ifdef LOG
+        std::cout<<" Triangle has verts "<<face[i]<<" :"<<objData.verts_[face[i]]<<std::endl ;
+#endif
         t4.push_back(objData.verts_[face[i]]);
         texture.push_back(Vec2i(0,0)) ;
         intensity[i] = norms[i]*light_dir ;
@@ -58,7 +61,8 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
     Triangle d(index3) ;
 
 //            d.draw(image1,*zBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],image ) ;
-    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
+//    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
+    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,1,textureImage) ;
 
 }
 
@@ -107,7 +111,9 @@ int main(int argc, char** argv )
 {
     srand(time(NULL)) ;
     ObjLoader loader("../testData/cube.obj") ;
+    loader.randomCopy(10000) ;
     ObjData objData = loader.getData() ;
+
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
     BoundingBox allbox = BoundingBox(loader.getMin(), loader.getMax()) ;
@@ -164,30 +170,35 @@ int main(int argc, char** argv )
             t.second++ ;
             if(newNode==nullptr)  {
                 stk.pop() ;
+//                std::cout<<"pop"<<t.first->getId()<<std::endl;
                 continue ;
             }
 
             // if this node is a leaf node, so we decided to render, else push as the iterator
             if(newNode->isLeafNode())
             {
+                if(newNode->getFaces_size()<=0) continue ;
                 BoundingBox* t = newNode->getBox() ;
                 BoundingBox* t1 = pipline.change(*t) ;
 
                 if(!hzBuffer->canRejectBox(t1->getPmin(),t1->getPmax(),t1->getPmin()[2]))
                 {
-
                     std::vector<int>& allData = *(newNode->getFaces());
                     for(int i = 0 ; i < allData.size() ; i++)
                     {
+//                        std::cout<<" render "<<allData[i]<<" triangle"<<std::endl ;
                         renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
                     }
                 }else{
-                    std::cout<<"reject"<<std::endl ;
+                    Vec3f t2 = t1->getPmin() ;
+                    Vec3f t3 = t1->getPmax() ;
+                    std::cout<<"reject "<<t2<<" "<<t3<<std::endl ;
                 }
 
             }else{
                 std::pair<OcNode*,int> t1 = std::pair<OcNode*,int>(newNode,0) ;
                 stk.push(t1) ;
+//                std::cout<<"push" <<newNode->getId()<<std::endl;
             }
         }
 
@@ -204,6 +215,7 @@ int main(int argc, char** argv )
         zBuffer->clear();
         hzBuffer->clear() ;
         image1.clear();
+        break ;
     }
 
     window.endrender() ;

@@ -228,7 +228,7 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
 
 
     if(hzbuffer.canRejectBox(xmin,xmax,bound.first.z)==true) {
-        std::cout<<"reject triangle"<<std::endl ;
+//        std::cout<<"reject triangle"<<std::endl ;
         return  ;
     }
 
@@ -248,7 +248,7 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
         for(p.y=xmin.y;p.y<=xmax.y;p.y++)
         {
             Vec3f bscreen = barycentric(temp,new Point(p.x,p.y));
-            if(bscreen.x<0||bscreen.y<0||bscreen.z<0) continue ;
+            if(bscreen.x<-0.01||bscreen.y<-0.01||bscreen.z<-0.01) continue ;
 
             vector<TGAColor> colors  ;
             for(int i = 0 ;i<colorsPosition.size();i++)
