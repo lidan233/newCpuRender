@@ -8,6 +8,7 @@
 #include "window.h"
 #include "HierachyZBuffer.h"
 #include "Octree.h"
+#include "Timer.h"
 
 #include <glm/gtx/string_cast.hpp>
 #include <stack>
@@ -107,8 +108,9 @@ void renderToImage(ObjData& objData, TGAImage& renderimage , TGAImage& textureIm
 #ifdef __cplusplus
 extern "C"
 #endif
-int main(int argc, char** argv )
+int main3(int argc, char** argv )
 {
+
     srand(time(NULL)) ;
     ObjLoader loader("../testData/cube.obj") ;
     loader.randomCopy(10000) ;
@@ -118,7 +120,7 @@ int main(int argc, char** argv )
     Vec3f centerM = loader.getCenter() ;
     BoundingBox allbox = BoundingBox(loader.getMin(), loader.getMax()) ;
 
-    Octree* octree = new Octree(allbox,objData,10) ;
+    Octree* octree = new Octree(allbox,objData,1000) ;
     OcNode* root = octree->getRoot() ;
 
     float yaw = NYAW ;
@@ -139,6 +141,7 @@ int main(int argc, char** argv )
 
     while(1)
     {
+        Timer tc = Timer() ;
         Model model = Model(centerM) ;
         View view = View(ca) ;
         Project project = Project(ca,800,800,0.1,1000) ;
@@ -190,12 +193,15 @@ int main(int argc, char** argv )
                         renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
                     }
                 }else{
+#ifdef LOG
                     Vec3f t2 = t1->getPmin() ;
                     Vec3f t3 = t1->getPmax() ;
                     std::cout<<"reject "<<t2<<" "<<t3<<std::endl ;
+#endif
                 }
 
             }else{
+
                 std::pair<OcNode*,int> t1 = std::pair<OcNode*,int>(newNode,0) ;
                 stk.push(t1) ;
 //                std::cout<<"push" <<newNode->getId()<<std::endl;
@@ -215,7 +221,7 @@ int main(int argc, char** argv )
         zBuffer->clear();
         hzBuffer->clear() ;
         image1.clear();
-        break ;
+        std::cout<<tc.elapsed()<<std::endl ;
     }
 
     window.endrender() ;
@@ -228,10 +234,12 @@ int main(int argc, char** argv )
 #ifdef __cplusplus
 extern "C"
 #endif
-int main2(int argc, char** argv )
+int main(int argc, char** argv )
 {
     srand(time(NULL)) ;
+    srand(time(NULL)) ;
     ObjLoader loader("../testData/cube.obj") ;
+    loader.randomCopy(10000) ;
     ObjData objData = loader.getData() ;
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
@@ -251,6 +259,7 @@ int main2(int argc, char** argv )
 
     while(1)
     {
+        Timer tc = Timer() ;
         Model model = Model(centerM) ;
         View view = View(ca) ;
         Project project = Project(ca,800,800,0.1,1000) ;
@@ -293,6 +302,7 @@ int main2(int argc, char** argv )
         zBuffer->clear();
         hzBuffer->clear() ;
         image1.clear();
+        std::cout<<tc.elapsed()<<std::endl ;
     }
 
     window.endrender() ;
@@ -308,7 +318,7 @@ int main1(int argc, char** argv)
     buffer.cover(1,2,100) ;
 }
 
-int main3(int argc, char** argv) {
+int main4(int argc, char** argv) {
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
 

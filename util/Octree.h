@@ -16,6 +16,8 @@ private:
     OcNode* children[8] = {nullptr} ;
     std::unique_ptr<BoundingBox> box = nullptr ;
     std::vector<int>* faceid = nullptr;
+    int t[8] = {0,1,2,3,4,5,6,7} ;
+    Vec3f lastView ;
 public:
     OcNode(int id, std::unique_ptr<BoundingBox>& b)
     {
@@ -35,11 +37,12 @@ public:
     }
     std::vector<int>* getFaces() { return faceid ; }
     void setFaces(std::vector<int>* faces) {
-        if(faces!=nullptr)
+        if(faces!=nullptr&&faces->size()!=0)
         {
             faceid = new std::vector<int>(*faces) ;
             isLeaf = true ;
         }
+
     }
 
     OcNode* getChild(int i) { return children[i] ; }
@@ -54,7 +57,7 @@ class Octree {
 private:
     OcNode* root = nullptr;
     std::vector<OcNode*> nodes ;
-    int minisize = 10 ;
+    int minisize = 30 ;
 
     void Build(const BoundingBox& box,ObjData& objdata,int minsize);
 public:

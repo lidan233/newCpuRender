@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="newCpuRender"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\external\;CMake Files\external\cxxopts\;CMake Files\external\cxxopts\src\;CMake Files\external\cxxopts\test\;CMake Files\external\glm\;CMake Files\external\glm\glm\;CMake Files\external\glm\test\;CMake Files\external\glm\test\bug\;CMake Files\external\glm\test\core\;CMake Files\external\glm\test\gtc\;CMake Files\external\glm\test\gtx\;CMake Files\external\glm\util\;CMake Files\cmake\;CMake Files\config\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="newCpuRender">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/newCpuRender" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/render"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/util"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/geom"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/datatype"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/IO"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/glm"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/include"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/cmake-build-release/config"/>
+					<Add directory="/usr/local/Cellar/sdl2/2.0.9_1/include/SDL2"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 newCpuRender"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="newCpuRender/fast">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/newCpuRender" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/render"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/util"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/geom"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/datatype"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/IO"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/glm"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/include"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/cmake-build-release/config"/>
+					<Add directory="/usr/local/Cellar/sdl2/2.0.9_1/include/SDL2"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 newCpuRender/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/example" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 example"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example/fast">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/example" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 example/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="options_test">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/options_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 options_test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="options_test/fast">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/options_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 options_test/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="link_test">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/link_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 link_test"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="link_test/fast">
+				<Option output="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/link_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lidan/CLionProjects/cpurender/external/cxxopts/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 link_test/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/lidan/CLionProjects/cpurender/cmake-build-release/external/cxxopts/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/IO/ObjLoader.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/IO/ObjLoader.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/IO/tgaimage.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/IO/tgaimage.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/Model.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/Project.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/Vec.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/View.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/ViewPort.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/data.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/datatype/pipline.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/src/example.cpp">
+			<Option target="example"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/test/link_a.cpp">
+			<Option target="link_test"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/test/link_b.cpp">
+			<Option target="link_test"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/test/main.cpp">
+			<Option target="options_test"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/test/options.cpp">
+			<Option target="options_test"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/geom/Line.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/geom/Line.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/geom/Point.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/geom/triangle.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/geom/triangle.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/main.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/LTexture.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/LTexture.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/camera.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/camera.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/render.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/render.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/window.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/render/window.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/BoundingBox.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/HierachyZBuffer.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/HierachyZBuffer.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/Octree.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/Octree.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/Timer.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/ZBuffer.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/ZBuffer.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/calculate.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/common.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/manipulation.cpp">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/util/manipulation.h">
+			<Option target="newCpuRender"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cxxopts\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/cxxopts-config.cmake.in">
+			<Option virtualFolder="CMake Files\external\cxxopts\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cxxopts\src\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/cxxopts/test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\cxxopts\test\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/glm/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\glm\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\test\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/test/bug/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\test\bug\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/test/core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\test\core\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/test/gtc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\test\gtc\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/test/gtx/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\test\gtx\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/external/glm/util/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\external\glm\util\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/cmake/LidanBuild.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/cmake/lidanBase.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/Users/lidan/CLionProjects/cpurender/config/config.h.in">
+			<Option virtualFolder="CMake Files\config\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

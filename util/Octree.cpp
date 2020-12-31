@@ -42,8 +42,11 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
     Vec3f pmid = (pmin+pmax)/2.0 ;
     Vec3f size = pmax - pmin ;
 
-    if(size[0] * size[1] * size[2] < 4) { return &allfaces ;}
+    if(size[0] * size[1] * size[2] < 10) { return &allfaces ;}
+
+#ifdef LOG
     std::cout<<"split from "<<pmin<<" to "<<pmax<<" by "<<pmid <<std::endl ;
+#endif
 
     std::vector<int> firstSplit_L ;
     std::vector<int> firstSplit_R ;
@@ -91,12 +94,14 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
     BoundingBox* boxLRR ;
     BoundingBox* boxRRR ;
 
+
     boxLLL = new BoundingBox(beginLLL,beginLLL+vol) ;
     std::unique_ptr<BoundingBox> child1(boxLLL) ;
     OcNode* node1 = new OcNode(nodes.size(),child1) ;
     node->setChild(node1,0) ;
     nodes.push_back(node1) ;
     node1->setFaces(SplitFace(data,node1,nodes,minisize,thirdSplit_LLL) ) ;
+
 
     boxRLL = new BoundingBox(beginRLL,beginRLL+vol) ;
     std::unique_ptr<BoundingBox> child2(boxRLL) ;
@@ -174,13 +179,35 @@ OcNode* OcNode::getNext(int index, Vec3f viewdir)
 {
     if(index <0 || index>=8 ) { return nullptr ; }
     if(isLeaf) { return nullptr ; }
-    int t[8] = {0,1,2,3,4,5,6,7} ;
+
+
     OcNode** children_s = children ;
     // from big to small
-    std::sort(&t[0],&t[1],[children_s,viewdir](int i, int j){
-        float v1 = children_s[i]->box->getPmid() * viewdir  ;
-        float v2 = children_s[j]->box->getPmid() * viewdir  ;
-        return v1 > v2 ;
-    }) ;
+    if(index==0)
+    {
+        lastView = viewdir ;
+        std::sort(&t[0],(&t[7])+1,[children_s,viewdir](int i, int j){
+            if(children_s[i]== nullptr) return false ;
+            if(children_s[j]==nullptr) return true ;
+            float v1 = children_s[i]->box->getPmid() * viewdir  ;
+            float v2 = children_s[j]->box->getPmid() * viewdir  ;
+            return v1 > v2 ;
+        }) ;
+    }
+
+    if((lastView - viewdir).norm()>0.2)
+    {
+        lastView = viewdir ;
+        std::sort(&t[0],(&t[7])+1,[children_s,viewdir](int i, int j){
+            if(children_s[i]== nullptr) return false ;
+            if(children_s[j]==nullptr) return true ;
+            float v1 = children_s[i]->box->getPmid() * viewdir  ;
+            float v2 = children_s[j]->box->getPmid() * viewdir  ;
+            return v1 > v2 ;
+        }) ;
+    }
+
+//    std::cout<<"choose "<<t[index]<<"by "<<a<<" "<<b<<" :"<<viewdir<< std::endl ;
+
     return children[t[index]] ;
 }
