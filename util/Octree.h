@@ -67,6 +67,7 @@ public:
     }
 
     OcNode* getRoot() { return root ; }
+    int getDepth(OcNode* node) ;
 };
 
 

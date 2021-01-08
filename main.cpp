@@ -122,6 +122,7 @@ int main3(int argc, char** argv )
 
     Octree* octree = new Octree(allbox,objData,1000) ;
     OcNode* root = octree->getRoot() ;
+    std::cout<< "all octree depth is "<<octree->getDepth(root)<<std::endl ;
 
     float yaw = NYAW ;
     float pitch = NPITCH ;

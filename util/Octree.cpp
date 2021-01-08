@@ -156,6 +156,19 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
 }
 
 
+int Octree::getDepth(OcNode* node)
+{
+    if(node==nullptr) return 0 ;
+    int res = 0 ;
+    if(node == nullptr) node = root ;
+    for(int i = 0 ; i <8; i++)
+    {
+        int t  = getDepth(node->getChild(i))+1 ;
+        res = res>t?res:t ;
+    }
+    return res ;
+}
+
 void Octree::Build(const BoundingBox& box,ObjData& objdata,int minsize)
 {
     Vec3f allmin = box.getPmin() ;
