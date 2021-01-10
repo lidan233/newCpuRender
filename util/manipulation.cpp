@@ -24,7 +24,7 @@ Matrix41 manipulation::v2m(Vec3f v)
 
 Matrix44 manipulation::viewport(int x,int y,int w,int h,int depth)
 {
-    Matrix44 m = Matrix44::indentity() ;// 暂时默认是4 后期通过#define在data.h中解决
+    Matrix44 m = Matrix44::indentity() ;
 
     m[0][3] = x+w/2.f ;
     m[1][3] = y+h/2.f ;
@@ -67,12 +67,6 @@ void manipulation::translation(Matrix44& mat,Vec3f v)
     mat[1][3] += v.y ;
     mat[2][3] += v.z ;
 }
-
-
-
-
-
-//逆时针旋转
 Matrix44 manipulation::rotation_x(float cosangle,float sinangle)
 {
     Matrix44 R = Matrix44::indentity() ;
@@ -109,7 +103,6 @@ Matrix44 manipulation::projection(float camera){
 
 Matrix44 manipulation::lookAt(Vec3f eye,Vec3f center ,Vec3f up)
 {
-    //左手系 右手系可以改为center-eye 其他不用动
     Vec3f z = (eye-center).normalize() ;
     Vec3f x = cross(up,z).normalize() ;
     Vec3f y = cross(z,x).normalize() ;
@@ -120,7 +113,6 @@ Matrix44 manipulation::lookAt(Vec3f eye,Vec3f center ,Vec3f up)
         minv[0][i] = x[i] ;
         minv[1][i] = y[i] ;
         minv[2][i] = z[i] ;
-        //平移操作
         minv[i][3]  =  -center[i] ;
     }
 

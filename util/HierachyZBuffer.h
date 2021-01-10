@@ -166,7 +166,7 @@ public:
             Vec2f p_max = Vec2f(pmax[0] * begin_height[count] , pmax[1] * begin_width[count] );
 
             // If all buffer value is less than mindepth, so we can't write any value.
-            if(canRejectBox_level(count,pmin,pmax,mindepth)==true)
+            if(canRejectBox_level(count,p_min,p_max,mindepth)==true)
             {
                 return true;
             }

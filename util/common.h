@@ -144,6 +144,16 @@ inline void readObj(const string filename,vector<Vec3f>& verts_,vector<vector<in
     std::cerr << "# v# " << verts_.size() << " f# "  << faces_.size() << std::endl;
 }
 
+
+inline Vec3f getNormal(Vec3f point1, Vec3f point2 , Vec3f point3)
+{
+    Vec3f first = point2 - point1 ;
+    Vec3f second = point3 - point1 ;
+
+    return cross(first,second) ;
+}
+
+
 inline void normalVertexs(vector<Vec3f>& s_verts ,vector<Vec3i>& verts_,int height,int width,Vec3f camera,Vec3f eye,Vec3f center,Vec3f up)
 {
     // 平移+旋转 平移到center 对应的verts_此时还是在-1到1之间的local坐标  然后我们转换一下坐标系
@@ -171,6 +181,19 @@ inline double round(double src,int precise) {
     ss >> src;
     return src ;
 }
+
+inline Vec3f Barycentric(Vec2f p, Vec2f a, Vec2f b, Vec2f c)
+{
+    Vec3f res ;
+    Vec2d v0 = b - a, v1 = c - a, v2 = p - a;
+    double den = v0.x * v1.y - v1.x * v0.y;
+    res[1] = (v2.x * v1.y - v1.x * v2.y) / den;
+    res[2] = (v0.x * v2.y - v2.x * v0.y) / den;
+    res[0] = 1.0f - res[0]-res[1];
+    return res ;
+}
+
+
 inline Vec3f barycentric(vector<Point*> points,Point* p)
 {
     Vec3f all_x = Vec3f(points[2]->getX()-points[0]->getX(),
@@ -181,11 +204,9 @@ inline Vec3f barycentric(vector<Point*> points,Point* p)
                         points[0]->getY()-p->getY()) ;
     Vec3f result = cross(all_x,all_y) ;
 
-    //根据重心坐标系推出0存在 xy拆分两个方程 然后=0 定义为垂直两个向量 X乘
-    //这里结果中如果两个接近共线则认为是0 则三角形被认为是退化三角形
     if(abs(result[2])>1e-2)
     {
-        return Vec3f(1.f-(result.x+result.y)/result.z,result.y/result.z,result.x/result.z) ;
+        return Vec3f(1.f-double(result.x+result.y)/double(result.z),double(result.y)/double(result.z),double(result.x)/double(result.z)) ;
     }
     return Vec3f(-1,1,1);
 }
@@ -203,7 +224,10 @@ inline std::pair<Vec2f,Vec2f> getMBR(TGAImage& image,int* points_i,vector<Vec3f>
         xmax.x = std::min((float)clamp[0],std::max((float)xmax[0],points[points_i[i]].x)) ;
         xmax.y = std::min((float)clamp[1],std::max((float)xmax[1],points[points_i[i]].y)) ;
     }
-
+    xmin.x = floor(xmin.x) ;
+    xmin.y = floor(xmin.y) ;
+    xmax.x = ceil(xmax.x) ;
+    xmax.y = ceil(xmax.y) ;
 
     return make_pair(xmin,xmax) ;
 }

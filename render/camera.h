@@ -109,8 +109,8 @@ public:
         xoffset *= MouseSensitivity;
         yoffset *= MouseSensitivity;
 
-        Yaw   -= yoffset;
-        Pitch += xoffset;
+        Yaw   -= xoffset;
+        Pitch += yoffset;
 
         updateCameraVectors();
     }

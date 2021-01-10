@@ -196,7 +196,10 @@ void Triangle::draw(TGAImage& image,ZBuffer& zbuffer ,vector<Vec3f>& points,vect
     {
         for(p.y=xmin.y;p.y<=xmax.y;p.y++)
         {
-            Vec3f bscreen = barycentric(temp,new Point(p.x,p.y));
+//            Vec3f bscreen = barycentric(temp,new Point(p.x,p.y));
+            Vec3f bscreen = Barycentric(Vec2f(p.x,p.y),temp[0]->getData(),
+                                        temp[1]->getData(),temp[2]->getData());
+
             if(bscreen.x<0||bscreen.y<0||bscreen.z<0) continue ;
 
             vector<TGAColor> colors  ;
@@ -248,7 +251,9 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
         for(p.y=xmin.y;p.y<=xmax.y;p.y++)
         {
             Vec3f bscreen = barycentric(temp,new Point(p.x,p.y));
-            if(bscreen.x<-0.01||bscreen.y<-0.01||bscreen.z<-0.01) continue ;
+//            Vec3f bscreen = Barycentric(Vec2f(p.x,p.y),temp[0]->getData(),
+//                                        temp[1]->getData(),temp[2]->getData());
+            if(bscreen.x<-0.01||bscreen.y<-0.01||bscreen.z<-0.010) continue ;
 
             vector<TGAColor> colors  ;
             for(int i = 0 ;i<colorsPosition.size();i++)
