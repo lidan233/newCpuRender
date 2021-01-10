@@ -64,11 +64,11 @@ include_directories(
         "${CMAKE_CURRENT_SOURCE_DIR}/IO/"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/glm/"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/include/"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googletest/include"
-#        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googlemock/include"
+        #        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googletest/include"
+        #        "${CMAKE_CURRENT_SOURCE_DIR}/external/googletest/googlemock/include"
         "${CMAKE_CURRENT_SOURCE_DIR}/external/cxxopts/include"
         "${CMAKE_CURRENT_BINARY_DIR}/config/"
-        )
+)
 
 IF (WIN32)
     include_directories(external/SDL/lib-vc2019/include/)
