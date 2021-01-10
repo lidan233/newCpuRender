@@ -10,7 +10,7 @@
 
 #include <list>
 #include <algorithm>
-#include <io.h>
+
 struct EdgeNode{
     float left_x ;
     float dx ;
@@ -28,18 +28,17 @@ struct ActiveEdgeNode{
 //    float rdx ;
 //    int rdy ;
 
-    // help rasterizer
     float z ;
     float dzx ;
     float dzy ;
     int id ; // 交点对所在的多边形的编号
 };
 
-// 活化和非活化的polygonNode数据结构相同，所以这里合成为一个(我这里仅仅支持三角形Polygon)
 struct Poly_TriNode{
     float a,b,c,d ;
     int pid ;
     int linesize  ;
+    Vec3f norm ;
     std::vector< ActiveEdgeNode> activeEdgeTable;
 };
 
@@ -47,18 +46,18 @@ struct Poly_TriNode{
 class ScanlineZbuffer {
 private:
     Lmatrix<Doub> szbuffer ;
+    Lmatrix<Int> idBuffer ;
     int height = 0 , width = 0 ;
-    std::vector<std::list<Poly_TriNode>> polygonTable; // Poly 表
+    std::vector<std::list<Poly_TriNode>> polygonTable;
     std::vector<std::list<EdgeNode>> edgeTable; // edge table
-    std::vector<Poly_TriNode> activePolygonTable; //两个活化表
-
-    int** idBuffer ;
-    bool needUpdate ;
+    std::vector<Poly_TriNode> activePolygonTable;
 
 public:
-    ScanlineZbuffer(int H, int W, ObjData& objData) ;
+    ScanlineZbuffer(int H, int W) ;
     void addEdge(int y, Poly_TriNode* active_polygon) ;
-    void run(ObjData& objData) ;
+    void run(ObjData& objData,Vec3f LightView, TGAImage& image) ;
+    void build(ObjData& objData) ;
+    void release() ;
 
 };
 

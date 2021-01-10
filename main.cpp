@@ -9,6 +9,7 @@
 #include "HierachyZBuffer.h"
 #include "Octree.h"
 #include "Timer.h"
+#include "ScanlineZbuffer.h"
 
 #include <glm/gtx/string_cast.hpp>
 #include <stack>
@@ -108,7 +109,46 @@ void renderToImage(ObjData& objData, TGAImage& renderimage , TGAImage& textureIm
 
 }
 
+#ifdef __cplusplus
+extern "C"
+#endif
+int usingScanlineBuffer(int argc,ObjLoader& loader )
+{
+    ObjData objData = loader.getData() ;
+    ObjData objData1 = objData ;
+    Vec3f centerM = loader.getCenter() ;
 
+    TGAImage image1(width, height, TGAImage::RGBA);
+    image1.set(0, 0, red);
+
+    Window window(height,width,reinterpret_cast<Uint32*>(image1.buffer())) ;
+    ScanlineZbuffer slzBuffer(height,width) ;
+
+    while(1)
+    {
+        Timer tc = Timer();
+        Model model = Model(centerM);
+        View view = View(ca);
+        Project project = Project(ca, 800, 800, 0.1, 1000);
+        ViewPort viewport = ViewPort(800, 800);
+        PipLine pipline = PipLine(model,view,project,viewport) ;
+        pipline.change(objData) ;
+
+        if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0) break ;
+        Vec2f cursorOffset = window.getOffset() ;
+        ca.ProcessMouseMovement(cursorOffset[0],cursorOffset[1],true );
+
+        slzBuffer.build(objData) ;
+        slzBuffer.run(objData,ca.getViewDir(),image1) ;
+
+        objData = objData1 ;
+        image1.clear();
+        std::cout<<tc.elapsed()<<std::endl ;
+    }
+
+    window.endrender() ;
+    return 0 ;
+}
 
 // Using
 #ifdef __cplusplus
@@ -308,7 +348,7 @@ int usingHZ(int argc, ObjLoader& loader)
         }
 //        image1.flip_vertically();
 //        image1.write_tga_file("output1.tga");
-        long starttime = time(NULL) ;
+//        long starttime = time(NULL) ;
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0)
             break ;
         Vec2f cursorOffset = window.getOffset() ;
@@ -331,8 +371,9 @@ int main(int argc, char** argv)
     srand(time(NULL)) ;
 //    ObjLoader loader("../testData/lidan.obj") ;
     ObjLoader loader("../testData/cube.obj") ;
-    loader.randomCopy(100000) ;
-    usingHZ(1000,loader) ;
+    loader.randomCopy(1000) ;
+//    usingHZ(1000,loader) ;
+    usingScanlineBuffer(1000,loader) ;
 //    usingHZandOctree(1000,loader) ;
 }
 

@@ -505,7 +505,7 @@ namespace Vec {
     }
 
     template<int size,typename T>
-    inline vec<size,T> swap(vec<size,T> left, vec<size,T> right)
+    inline void swap(vec<size,T>& left, vec<size,T>& right)
     {
         for(int i = 0 ; i < size ; i++)
         {

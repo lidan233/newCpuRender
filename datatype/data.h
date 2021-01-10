@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
 
 
 using namespace std ;
@@ -233,7 +234,7 @@ class Lmatrix {
 private:
     int size_matrix_m ;
     int size_matrix_n ;
-    T **data ;
+    T **data = nullptr;
 
 public:
     Lmatrix() ;
@@ -249,6 +250,7 @@ public:
     inline int ncols() const ;
     void resize(int newn, int newm) ;
     void assign(int newn, int newm, const T& a) ;
+    void fill(int beginx,int beginy , int size_x, int size_y, T value) ;
 //    friend std::ostream& operator<<( std::ostream&, const Lmatrix<T>& ) ;
     ~Lmatrix() ;
 };
@@ -276,8 +278,23 @@ template<class T>
 Lmatrix<T>::Lmatrix(int m, int n ): size_matrix_m(m), size_matrix_n(n) , data(m>0? new T*[m] : nullptr)
 {
     int i,nel=m*n;
-    if (data) data[0] = nel>0 ? new T[nel] : NULL;
-    for (i=1;i<n;i++) data[i] = data[i-1] + m;
+    if (data)
+        data[0] = nel>0 ? new T[nel] : NULL;
+    for (i=1;i<m;i++) data[i] = data[i-1] + n;
+}
+
+template<class T>
+void Lmatrix<T>::fill(int beginx,int beginy , int size_x, int size_y, T value)
+{
+    assert(beginx < size_matrix_m && beginx+size_x<=size_matrix_m && beginy < size_matrix_n && beginy + size_y <= size_matrix_n ) ;
+
+    for(int i = 0; i < size_x; i++ )
+    {
+        for(int j = 0 ; j < size_y ; j++)
+        {
+            data[i+beginx][j+beginy] = value ;
+        }
+    }
 }
 
 template<class T>
@@ -294,7 +311,7 @@ Lmatrix<T>::Lmatrix(int m, int n, const T* a) : size_matrix_m(m), size_matrix_n(
 {
     int i,j,nel = size_matrix_m*size_matrix_n ;
     if(data) data[0] = nel>0? new T[nel] : NULL ;
-    for(int i = 0; i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n ;
+    for(int i = 1; i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n ;
     for(int i = 0; i < size_matrix_m ; i++) for(int j = 0 ; j< size_matrix_n ; j++) data[i][j] = *a++ ;
 }
 
@@ -332,10 +349,10 @@ Lmatrix<T> & Lmatrix<T>::operator=(const Lmatrix<T> &rhs)
             data = size_matrix_m > 0 ? new T*[size_matrix_m] : nullptr ;
             nel = size_matrix_m*size_matrix_n ;
             if(data) data[0] = nel >0 ? new T[nel] : nullptr ;
-            for(int i = 1;  i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n;
+            for( i = 1;  i < size_matrix_m; i++) data[i] = data[i-1] + size_matrix_n;
         }
 
-        for(int i = 0; i <size_matrix_m; i++) for(int j = 0 ; j< size_matrix_n; j++) data[i][j] = rhs[i][j] ;
+        for( i = 0; i <size_matrix_m; i++) for( j = 0 ; j< size_matrix_n; j++) data[i][j] = rhs[i][j] ;
 
     }
     return *this ;
@@ -408,7 +425,7 @@ void Lmatrix<T>::assign(int newm, int newn, const T& a)
         }
 
         size_matrix_m = newm ;
-        size_matrix_n - newn ;
+        size_matrix_n = newn ;
         data = size_matrix_m>0 ? new T*[size_matrix_m] : NULL;
         nel = size_matrix_m*size_matrix_n;
         if (data) data[0] = nel>0 ? new T[nel] : NULL;
