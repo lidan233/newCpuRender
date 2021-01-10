@@ -12,6 +12,7 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <stack>
+#include <omp.h>
 
 
 const int width = 800;
@@ -25,6 +26,10 @@ Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
 Vec3f up(0,1,0);
 Vec3f light_dir = camera_pos - center ;
+float yaw = NYAW ;
+float pitch = NPITCH ;
+camera ca(camera_pos,up,center,yaw,pitch) ;
+
 
 #define NOLOG
 
@@ -51,7 +56,7 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
 #endif
         t4.push_back(objData.verts_[face[i]]);
         texture.push_back(Vec2i(0,0)) ;
-        intensity[i] = norms[i]*light_dir ;
+        intensity[i] = -(norms[i]*ca.getViewDir()) ;
 
     }
 
@@ -61,9 +66,10 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
     int index3[3] = {0,1,2};
     Triangle d(index3) ;
 
+    if(intensity[0]+intensity[1]+intensity[2]>0)
 //            d.draw(image1,*zBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],image ) ;
-//    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
-    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,1,textureImage) ;
+        d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
+//    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,1,textureImage) ;
 
 }
 
@@ -108,25 +114,22 @@ void renderToImage(ObjData& objData, TGAImage& renderimage , TGAImage& textureIm
 #ifdef __cplusplus
 extern "C"
 #endif
-int main3(int argc, char** argv )
+int usingHZandOctree(int argc,ObjLoader& loader )
 {
 
-    srand(time(NULL)) ;
-    ObjLoader loader("../testData/cube.obj") ;
-    loader.randomCopy(10000) ;
+//    srand(time(NULL)) ;
+//    ObjLoader loader(path) ;
+//    loader.randomCopy(argc) ;
     ObjData objData = loader.getData() ;
 
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
     BoundingBox allbox = BoundingBox(loader.getMin(), loader.getMax()) ;
 
-    Octree* octree = new Octree(allbox,objData,1000) ;
+    Octree* octree = new Octree(allbox,objData,30) ;
     OcNode* root = octree->getRoot() ;
     std::cout<< "all octree depth is "<<octree->getDepth(root)<<std::endl ;
 
-    float yaw = NYAW ;
-    float pitch = NPITCH ;
-    camera ca(camera_pos,up,center,yaw,pitch) ;
 
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
@@ -170,12 +173,21 @@ int main3(int argc, char** argv )
         while(stk.size()!=0)
         {
             std::pair<OcNode*,int>& t = stk.top() ;
-            OcNode* newNode = t.first->getNext(t.second,ca.getViewDir()) ;
-            t.second++ ;
-            if(newNode==nullptr)  {
+
+            OcNode* newNode = nullptr ;
+            if(t.first->isLeafNode())
+            {
+                newNode = t.first ;
                 stk.pop() ;
+            }else{
+                newNode = t.first->getNext(t.second,ca.getViewDir()) ;
+                t.second++ ;
+
+                if(newNode==nullptr)  {
+                    stk.pop() ;
 //                std::cout<<"pop"<<t.first->getId()<<std::endl;
-                continue ;
+                    continue ;
+                }
             }
 
             // if this node is a leaf node, so we decided to render, else push as the iterator
@@ -203,9 +215,16 @@ int main3(int argc, char** argv )
 
             }else{
 
-                std::pair<OcNode*,int> t1 = std::pair<OcNode*,int>(newNode,0) ;
-                stk.push(t1) ;
+                BoundingBox* t = newNode->getBox() ;
+                BoundingBox* t1 = pipline.change(*t) ;
+                if(newNode->getFaceSize()>0 && !hzBuffer->canRejectBox(t1->getPmin(),t1->getPmax(),t1->getPmin()[2]))
+                {
+                    std::pair<OcNode*,int> tt = std::pair<OcNode*,int>(newNode,0) ;
+                    stk.push(tt) ;
 //                std::cout<<"push" <<newNode->getId()<<std::endl;
+                }else{
+//                    std::cout<<"reject"<<std::endl ;
+                }
             }
         }
 
@@ -235,19 +254,15 @@ int main3(int argc, char** argv )
 #ifdef __cplusplus
 extern "C"
 #endif
-int main(int argc, char** argv )
+int usingHZ(int argc, ObjLoader& loader)
 {
-    srand(time(NULL)) ;
-    srand(time(NULL)) ;
-    ObjLoader loader("../testData/cube.obj") ;
-    loader.randomCopy(10000) ;
+//    srand(time(NULL)) ;
+//    ObjLoader loader("../testData/cube.obj") ;
+//    loader.randomCopy(argc) ;
     ObjData objData = loader.getData() ;
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
 
-    float yaw = NYAW ;
-    float pitch = NPITCH ;
-    camera ca(camera_pos,up,center,yaw,pitch) ;
 
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
@@ -311,20 +326,31 @@ int main(int argc, char** argv )
 }
 
 
+int main(int argc, char** argv)
+{
+    srand(time(NULL)) ;
+//    ObjLoader loader("../testData/lidan.obj") ;
+    ObjLoader loader("../testData/cube.obj") ;
+    loader.randomCopy(100000) ;
+    usingHZ(1000,loader) ;
+//    usingHZandOctree(1000,loader) ;
+}
+
 
 // using test some class: HierachyZBuffer
 int main1(int argc, char** argv)
 {
     HierachyZBuffer buffer = HierachyZBuffer(800,800) ;
     buffer.cover(1,2,100) ;
+    return 0 ;
 }
 
 int main4(int argc, char** argv) {
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
 
-    Render a = Render("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\obj\\african_head\\african_head.obj") ;
-    a.addTexture("C:\\Users\\lidan\\Desktop\\render\\newCpuRender\\testData\\obj\\african_head\\african_head_diffuse.tga") ;
+    Render a = Render("C:\\Users\\lidan\\Desktop\\newCpuRender\\testData\\obj\\african_head\\african_head.obj") ;
+    a.addTexture("C:\\Users\\lidan\\Desktop\\newCpuRender\\testData\\obj\\african_head\\african_head_diffuse.tga") ;
     vector<TGAColor> one ;
     vector<TGAColor> two ;
     a.setcamera(camera_pos) ;

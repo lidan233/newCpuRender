@@ -9,6 +9,9 @@
 #include <assert.h>
 #include <vector>
 
+#include <omp.h>
+#include "config.h"
+
 namespace Vec {
 
 
@@ -237,7 +240,9 @@ namespace Vec {
 
     template<typename T>
     vec<3, T> cross(vec<3, T> v1, vec<3, T> v2) {
-        return vec<3, T>(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+        return vec<3, T>(double(v1.y) * double(v2.z) - double(v1.z) * double(v2.y),
+                         double(v1.z) * double(v2.x) - double(v1.x) * double(v2.z),
+                         double(v1.x) * double(v2.y) - double(v1.y) * double(v2.x) );
     }
 
 
@@ -440,6 +445,8 @@ namespace Vec {
     template<size_t R1, size_t C1, size_t C2, typename T>
     mat<R1, C2, T> operator*(const mat<R1, C1, T> &lhs, mat<C1, C2, T> &rhs) {
         mat<R1, C2, T> result;
+        omp_set_num_threads(processor_N);
+#pragma omp parallel for
         for (size_t i = R1; i--;)
             for (size_t j = C2; j--;) {
                 vec<C1, T> temp1 = lhs[i];
@@ -487,6 +494,7 @@ namespace Vec {
         result[2] = std::min(left[2],right[2]) ;
         return result ;
     }
+
     inline vec<3,float> max(vec<3,float> left, vec<3,float> right)
     {
         vec<3,float> result ;
@@ -496,12 +504,24 @@ namespace Vec {
         return result ;
     }
 
+    template<int size,typename T>
+    inline vec<size,T> swap(vec<size,T> left, vec<size,T> right)
+    {
+        for(int i = 0 ; i < size ; i++)
+        {
+            T temp = left[i] ;
+            left[i] = right[i] ;
+            right[i] = temp ;
+        }
+    }
+
 }
 
 ////////////////
 
 
 typedef Vec::vec<2,  float> Vec2f;
+typedef Vec::vec<2, double> Vec2d ;
 typedef Vec::vec<2,  int>   Vec2i;
 typedef Vec::vec<3,  float> Vec3f;
 typedef Vec::vec<3,  int>   Vec3i;

@@ -7,7 +7,7 @@
 
 
 #include "Vec.h"
-#include <math.h>
+#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -23,7 +23,6 @@ public:
     static Matrix44 tranlation(Vec3f v) ;
     static void translation(Matrix44& matrix,Vec3f v) ;
 
-//逆时针旋转
     static Matrix44 rotation_x(float cosangle,float sinangle) ;
     static Matrix44 rotation_y(float cosangle,float sinangle) ;
     static Matrix44 rotation_z(float cosangle,float sinangle) ;

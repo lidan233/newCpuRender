@@ -22,6 +22,7 @@ public:
 
     double getX(){return x_ ;}
     double getY(){return y_ ;}
+    Vec2f getData() { return Vec2f(x_,y_) ;}
 };
 
 #endif //NEWCPURENDER_POINT_H

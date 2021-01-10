@@ -30,19 +30,33 @@ void split(ObjData& data, std::vector<int>& fatherfaces,int splitDimension, floa
 
 }
 
-std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& nodes, int minisize,std::vector<int>& allfaces)
+void  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& nodes, int minisize,std::vector<int>& allfaces,int layer)
 {
 //    std::vector<int> allfaces = node->getFaces() ;
 //    std::cout<<" my node has "<<allfaces.size()<<std::endl ;
 
-    if(allfaces.size() <= minisize ) return &allfaces;
+    node->setFaceSize(allfaces.size()) ;
+
+
+
+    if(allfaces.size() <= minisize || layer>=3){
+        node->setLeafNode() ;
+        node->setFaces(&allfaces) ;
+        return ;
+    }
+
     std::unique_ptr<BoundingBox> rootbox(node->getBox()) ;
     Vec3f pmin = rootbox->getPmin() ;
     Vec3f pmax = rootbox->getPmax() ;
     Vec3f pmid = (pmin+pmax)/2.0 ;
     Vec3f size = pmax - pmin ;
 
-    if(size[0] * size[1] * size[2] < 10) { return &allfaces ;}
+    if(size[0] * size[1] * size[2] < 1)
+    {
+        node->setLeafNode() ;
+        node->setFaces(&allfaces) ;
+        return ;
+    }
 
 #ifdef LOG
     std::cout<<"split from "<<pmin<<" to "<<pmax<<" by "<<pmid <<std::endl ;
@@ -100,7 +114,7 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
     OcNode* node1 = new OcNode(nodes.size(),child1) ;
     node->setChild(node1,0) ;
     nodes.push_back(node1) ;
-    node1->setFaces(SplitFace(data,node1,nodes,minisize,thirdSplit_LLL) ) ;
+    SplitFace(data,node1,nodes,minisize,thirdSplit_LLL,layer+1)  ;
 
 
     boxRLL = new BoundingBox(beginRLL,beginRLL+vol) ;
@@ -108,51 +122,52 @@ std::vector<int>*  SplitFace(ObjData& data, OcNode* node,std::vector<OcNode*>& n
     OcNode* node2 = new OcNode(nodes.size(),child2) ;
     node->setChild(node2,1) ;
     nodes.push_back(node2) ;
-    node2->setFaces(SplitFace(data,node2,nodes,minisize,thirdSplit_LLR) ) ;
+    SplitFace(data,node2,nodes,minisize,thirdSplit_RLL,layer+1) ;
 
     boxLRL = new BoundingBox(beginLRL,beginLRL+vol) ;
     std::unique_ptr<BoundingBox> child3(boxLRL) ;
     OcNode* node3 = new OcNode(nodes.size(),child3) ;
     node->setChild(node3,2) ;
     nodes.push_back(node3) ;
-    node3->setFaces(SplitFace(data,node3,nodes,minisize,thirdSplit_LRL) ) ;
+    SplitFace(data,node3,nodes,minisize,thirdSplit_LRL,layer+1) ;
 
     boxLLR = new BoundingBox(beginLLR,beginLLR+vol) ;
     std::unique_ptr<BoundingBox> child4(boxLLR) ;
     OcNode* node4 = new OcNode(nodes.size(),child4) ;
     node->setChild(node4,3) ;
     nodes.push_back(node4) ;
-    node4->setFaces(SplitFace(data,node4,nodes,minisize,thirdSplit_LLR) ) ;
+    SplitFace(data,node4,nodes,minisize,thirdSplit_LLR,layer+1) ;
 
     boxRRL = new BoundingBox(beginRRL,beginRRL+vol) ;
     std::unique_ptr<BoundingBox> child5(boxRRL) ;
     OcNode* node5 = new OcNode(nodes.size(),child5) ;
     node->setChild(node5,4) ;
     nodes.push_back(node5) ;
-    node5->setFaces(SplitFace(data,node5,nodes,minisize,thirdSplit_RRL) ) ;
+    SplitFace(data,node5,nodes,minisize,thirdSplit_RRL,layer+1) ;
 
     boxRLR = new BoundingBox(beginRLR,beginRLR+vol) ;
     std::unique_ptr<BoundingBox> child6(boxRLR) ;
     OcNode* node6 = new OcNode(nodes.size(),child6) ;
     node->setChild(node6,5) ;
     nodes.push_back(node6) ;
-    node6->setFaces(SplitFace(data,node6,nodes,minisize,thirdSplit_RLR) ) ;
+    SplitFace(data,node6,nodes,minisize,thirdSplit_RLR,layer+1) ;
 
     boxLRR = new BoundingBox(beginLRR,beginLRR+vol) ;
     std::unique_ptr<BoundingBox> child7(boxLRR) ;
     OcNode* node7 = new OcNode(nodes.size(),child7) ;
     node->setChild(node7,6) ;
     nodes.push_back(node7) ;
-    node7->setFaces(SplitFace(data,node7,nodes,minisize,thirdSplit_LRR) );
+    SplitFace(data,node7,nodes,minisize,thirdSplit_LRR,layer+1) ;
 
     boxRRR = new BoundingBox(beginRRR,beginRRR+vol) ;
     std::unique_ptr<BoundingBox> child8(boxRRR) ;
     OcNode* node8 = new OcNode(nodes.size(),child8) ;
     node->setChild(node8,7) ;
     nodes.push_back(node8) ;
-    node7->setFaces(SplitFace(data,node8,nodes,minisize,thirdSplit_RRR) ) ;
+    SplitFace(data,node8,nodes,minisize,thirdSplit_RRR,layer+1) ;
 
-    return nullptr ;
+    node->setFaces(nullptr) ;
+
 }
 
 
@@ -184,7 +199,7 @@ void Octree::Build(const BoundingBox& box,ObjData& objdata,int minsize)
     root = new OcNode(nodes.size(),rootbox) ;
     nodes.push_back(root) ;
 
-    SplitFace(objdata, root, nodes,this->minisize,allfaces) ;
+    SplitFace(objdata, root, nodes,this->minisize,allfaces,0) ;
 }
 
 

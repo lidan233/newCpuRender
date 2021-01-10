@@ -14,6 +14,8 @@
 
 #include <vector>
 #include <limits>
+#include <omp.h>
+
 
 class PipLine{
 
@@ -102,6 +104,8 @@ public:
 //        std::cout<<"result "<<result ;
 //#endif
 
+        omp_set_num_threads(processor_N);
+#pragma omp parallel for
         for(int i = 0 ;i< objData.verts_.size();i++)
         {
 

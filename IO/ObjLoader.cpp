@@ -19,6 +19,8 @@ void ObjLoader::randomCopy(int num)
     objdata.idxTex_.reserve(num*i_size) ;
     objdata.idxNorm_.reserve(num*in_size) ;
 
+
+
     for(int n =0 ; n < num ; n++)
     {
         std::vector<Vec3f> verts_;
@@ -38,7 +40,7 @@ void ObjLoader::randomCopy(int num)
 
         objdata.verts_.insert(objdata.verts_.end(),verts_.begin(),verts_.end()) ;
 
-        int size_begin = objdata.verts_.size() ;
+        int size_begin = objdata.verts_.size()  - v_size;
         for(int i = 0 ; i < f_size ; i++ )
         {
             Vec3i t1 =  objdata.faces_[i] + Vec3i(size_begin,size_begin,size_begin) ;
@@ -74,12 +76,18 @@ ObjLoader::ObjLoader(std::string path)
     std::string line;
     while (!in.eof()) {
         std::getline(in, line);
+//        std::cout<<line<<std::endl ;
         std::istringstream iss(line.c_str());
         char trash;
         if (!line.compare(0, 2, "v ")) {
             iss >> trash;
             Vec3f v;
             for (int i=0;i<3;i++) iss >> v[i];
+
+
+//            v = v*10.0 ;
+
+
             objdata.verts_.push_back(v);
             center = center + v ;
             pmin = Vec::min(v,pmin) ;

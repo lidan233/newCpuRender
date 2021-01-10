@@ -5,6 +5,7 @@
 #ifndef HIERARCHYZBUFFER_OCTREE_H
 #define HIERARCHYZBUFFER_OCTREE_H
 #include <vector>
+#include <algorithm>
 
 #include "BoundingBox.h"
 #include "common.h"
@@ -18,6 +19,7 @@ private:
     std::vector<int>* faceid = nullptr;
     int t[8] = {0,1,2,3,4,5,6,7} ;
     Vec3f lastView ;
+    int facesize = 0 ;
 public:
     OcNode(int id, std::unique_ptr<BoundingBox>& b)
     {
@@ -49,7 +51,11 @@ public:
     void setChild(OcNode* child, int i) { children[i] = child; }
 
     bool isLeafNode() { return isLeaf; }
+    void setLeafNode() { this->isLeaf = true ;}
     OcNode* getNext(int i, Vec3f viewdir) ;
+
+    void setFaceSize(int size) { facesize = size ; }
+    int getFaceSize() { return facesize ; }
 
 };
 

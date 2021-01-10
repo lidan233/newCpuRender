@@ -10,6 +10,7 @@ include(cmake/LidanBuild.cmake)
 SET(LOG 2)
 SET(ROOT_DIR ${CMAKE_SOURCE_DIR})
 set(CONDIF_DIR "${CMAKE_SOURCE_DIR}/")
+set(USING_OPENMP 1)
 
 include(ProcessorCount)
 ProcessorCount(processor_N)
@@ -24,7 +25,14 @@ configure_file (
         "${CMAKE_CURRENT_BINARY_DIR}/config/config.h"
 )
 
-if(APPLE)
+
+# Tell CMake where to find the OpenMP libraries.
+link_directories(${OpenMP_LIBRARY_DIR})
+
+
+
+if(APPLE&USING_OPENMP)
+    message(STATUS "using openmp")
     if(CMAKE_C_COMPILER_ID MATCHES "Clang")
         set(OpenMP_C"${CMAKE_C_COMPILER}")
         set(OpenMP_C_FLAGS"-fopenmp=libomp -Wno-unused-command-line-argument")
@@ -34,6 +42,7 @@ if(APPLE)
         set(OpenMP_libiomp5_LIBRARY ${OpenMP_C_LIB_NAMES})
     endif()
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        message(STATUS "using openmp")
         set(OpenMP_CXX"${CMAKE_CXX_COMPILER}")
         set(OpenMP_CXX_FLAGS"-fopenmp=libomp -Wno-unused-command-line-argument")
         set(OpenMP_CXX_LIB_NAMES"libomp""libgomp""libiomp5")
@@ -81,5 +90,5 @@ else()
 endif()
 
 
-add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp )
+add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp)
 target_link_libraries(newCpuRender SDL2)
