@@ -12,7 +12,7 @@ ScanlineZbuffer::ScanlineZbuffer(int H, int W)
     height = H ;
 }
 
-void ScanlineZbuffer::build(ObjData& objData)
+void ScanlineZbuffer::build(ObjData& objData,Vec3f LightView)
 {
     polygonTable.clear();
     edgeTable.clear();
@@ -29,12 +29,22 @@ void ScanlineZbuffer::build(ObjData& objData)
         Vec3i face = objData.faces_[i] ;
         Poly_TriNode polyTriNode ;
         polyTriNode.pid = i ;
-        Vec3f normal ;
+//        Vec3f normal ;
         float range_y_max = std::numeric_limits<float>::min() ;
         float range_y_min = std::numeric_limits<float>::max() ;
 
         Vec3f nn = objData.norms[objData.idxNorm_[i][0]] + objData.norms[objData.idxNorm_[i][0]]+objData.norms[objData.idxNorm_[i][0]] ;
         polyTriNode.norm = nn * 0.3333333 ;
+
+        Vec3f tt1 = objData.verts_[face[0]] ;
+        Vec3f tt2 = objData.verts_[face[1]] ;
+        Vec3f tt3 = objData.verts_[face[2]] ;
+
+        if(tt1[0]<0 || tt2[0]<0 || tt3[0] < 0 ) continue;
+        if(tt1[0]>= height-0.5 || tt2[0]>= height-0.5 || tt3[0]>= height-0.5 ) continue;
+        if(tt1[1]<0 || tt2[1]<0 || tt3[1] < 0 ) continue;
+        if(tt1[1]>=width-0.5 || tt2[1]>=width-0.5 || tt3[1]>=width-0.5 ) continue;
+
 
         // build edge table
         for(int j = 0 ; j < 3 ; j++)
@@ -67,19 +77,22 @@ void ScanlineZbuffer::build(ObjData& objData)
         }
 
         polyTriNode.linesize = round(range_y_max) - round(range_y_min) ;
-        Vec3f v1 = objData.verts_[face[0]] ;
-        Vec3f v2 = objData.verts_[face[1]] ;
-        Vec3f v3 = objData.verts_[face[2]] ;
-        normal = getNormal(v1,v2,v3) ;
+//        Vec3f v1 = objData.verts_[face[0]] ;
+//        Vec3f v2 = objData.verts_[face[1]] ;
+//        Vec3f v3 = objData.verts_[face[2]] ;
+//        normal = getNormal(v1,v2,v3) ;
 
-        if(polyTriNode.linesize > 0 && range_y_max >0 && range_y_min<height)
+        if(polyTriNode.linesize > 0 && range_y_max >=0 && range_y_min<height)
         {
             Vec3f t = objData.verts_[face[0]];
-            polyTriNode.a = normal.x ;
-            polyTriNode.b  = normal.y  ;
-            polyTriNode.c = normal.z ;
+            polyTriNode.a = polyTriNode.norm.x ;
+            polyTriNode.b  = polyTriNode.norm.y ;
+            polyTriNode.c = polyTriNode.norm.z ;
+
             polyTriNode.d = -(polyTriNode.a * t.x + polyTriNode.b * t.y + polyTriNode.c * t.z ) ;
             polygonTable[round(range_y_max)].push_back(polyTriNode) ;
+//            std::cout<<"input triangle "<<polyTriNode.norm<<std::endl ;
+
         }
     }
 }
@@ -110,7 +123,8 @@ static bool edgeSortCmp(const ActiveEdgeNode& lEdge, const ActiveEdgeNode& rEdge
 
 void ScanlineZbuffer::addEdge(int y, Poly_TriNode* active_polygon)
 {
-    for(list<EdgeNode>::iterator it= edgeTable[y].begin(); it != edgeTable[y].end(); it++)
+//    std::cout<<y<<" "<<edgeTable[y].size()<<std::endl  ;
+    for(auto it= edgeTable[y].begin(); it != edgeTable[y].end(); )
     {
         if (it->poly_id != active_polygon->pid)
         {
@@ -138,6 +152,7 @@ void ScanlineZbuffer::addEdge(int y, Poly_TriNode* active_polygon)
         it->poly_id = -1;
     }
     std::sort(active_polygon->activeEdgeTable.begin(), active_polygon->activeEdgeTable.end(), edgeSortCmp);
+
 }
 
 void ScanlineZbuffer::run(ObjData& objData,Vec3f LightView, TGAImage& image)
@@ -147,7 +162,7 @@ void ScanlineZbuffer::run(ObjData& objData,Vec3f LightView, TGAImage& image)
     for(int line = height-1; line >=0 ; line--)
     {
         memset(idBuffer[line], -1, sizeof(int)*width) ;
-        szbuffer.fill(0,0,1,width,std::numeric_limits<double>::min()) ;
+        szbuffer.fill(0,0,1,width,std::numeric_limits<double>::max()) ;
 
         for (list<Poly_TriNode>::iterator it = polygonTable[line].begin(), end = polygonTable[line].end(); it != end; ++it)
             activePolygonTable.push_back(*it);
@@ -156,6 +171,8 @@ void ScanlineZbuffer::run(ObjData& objData,Vec3f LightView, TGAImage& image)
         {
             //添加这个polygon的活化edge 在这个扫描线上的
             Poly_TriNode& active_polygon = activePolygonTable[i];
+//            std::cout<<"using active polygon"<<active_polygon.norm<<std::endl ;
+
             addEdge(line, &active_polygon);
 
             vector<ActiveEdgeNode>& active_edge_table = active_polygon.activeEdgeTable;
@@ -164,23 +181,31 @@ void ScanlineZbuffer::run(ObjData& objData,Vec3f LightView, TGAImage& image)
 
             int aesize = active_edge_table.size();
             // 所有活化边开始更新
-            for (vector<ActiveEdgeNode>::iterator ac = active_edge_table.begin(), end = active_edge_table.end(); ac != end; ++ac)
+            for (auto ac = active_edge_table.begin(); ac != active_edge_table.end(); ++ac)
             {
 
                 ActiveEdgeNode& edge1 = *ac;
                 ActiveEdgeNode& edge2 = *(++ac);
 
                 float zx = edge1.z;
+                int beginx = round(edge1.lx)>=0? round(edge1.lx): 0 ;
+                beginx =  beginx>=width? width-1: beginx ;
 
-                for (int x = round(edge1.lx), end = round(edge2.lx); x < end; ++x)
+                int endx = round (edge2.lx) >=0? round(edge2.lx) : 0 ;
+                endx = endx>=width?width-1:endx ;
+
+                for (int x = beginx; x < endx; ++x)
                 {
-                    if (zx > szbuffer[0][x])
+//                    assert(x < width) ;
+
+                    if (zx < szbuffer[0][x])
                     {
                         szbuffer[0][x] = zx;
                         idBuffer[line][x] = active_polygon.pid;
-                        float t = active_polygon.norm*LightView ;
-                        TGAColor color1 = TGAColor(0,0,255) * t ;
+                        float t = -(active_polygon.norm*LightView) ;
+                        TGAColor color1 = TGAColor(0,0,255)  ;
                         image.set(line,x,color1) ;
+//                        std::cout<<active_polygon.norm<<" "<<LightView<<" input color "<<color1<<std::endl ;
                     }
                     zx += edge1.dzx;
                 }

@@ -33,6 +33,7 @@ private:
             for(int j = min[1] ; j< max[1]; j++)
             {
                 // we can't reject
+                // 只要我最小的depth 小于其中一个depth 就不能reject
                 if((*(buffer[level]))[i][j] > depth) return false ;
             }
         }
@@ -151,7 +152,7 @@ public:
     bool canRejectBox(Vec3f pmin_, Vec3f pmax_, float mindepth)
     {
         int count = minlevel-1 ;
-        if(pmax_[0]<0 || pmax_[1]<0  || pmin_[0]>begin_height[0] || pmin_[1]>begin_height[1] )
+        if(pmax_[0]<0 || pmax_[1]<0  || pmin_[0]>begin_height[0] || pmin_[1]>begin_width[0] )
         {
             return true ;
         }

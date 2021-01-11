@@ -9,6 +9,7 @@
 #include "common.h"
 
 #include <list>
+#include <vector>
 #include <algorithm>
 
 struct EdgeNode{
@@ -39,7 +40,7 @@ struct Poly_TriNode{
     int pid ;
     int linesize  ;
     Vec3f norm ;
-    std::vector< ActiveEdgeNode> activeEdgeTable;
+    std::vector<ActiveEdgeNode> activeEdgeTable;
 };
 
 
@@ -56,7 +57,7 @@ public:
     ScanlineZbuffer(int H, int W) ;
     void addEdge(int y, Poly_TriNode* active_polygon) ;
     void run(ObjData& objData,Vec3f LightView, TGAImage& image) ;
-    void build(ObjData& objData) ;
+    void build(ObjData& objData,Vec3f LightView) ;
     void release() ;
 
 };

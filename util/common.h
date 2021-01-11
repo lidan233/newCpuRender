@@ -236,8 +236,8 @@ inline std::pair<Vec2f,Vec2f> getMBR(TGAImage& image,int* points_i,vector<Vec3f>
 inline std::pair<Vec3f,Vec3f> getMBRD(TGAImage& image,int* points_i,vector<Vec3f> points)
 {
     Vec3f xmin(std::numeric_limits<float>::max(),std::numeric_limits<float>::max(),std::numeric_limits<float>::max()) ;
-    Vec3f xmax(-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max(),-std::numeric_limits<float>::max()) ;
-    Vec2f clamp(image.get_width()-1,image.get_height()-1) ;
+    Vec3f xmax(std::numeric_limits<float>::min(),-std::numeric_limits<float>::min(),-std::numeric_limits<float>::min()) ;
+    Vec2f clamp(image.get_height()-1,image.get_width()-1) ;
 
     for(int i = 0;i<3;i++)
     {

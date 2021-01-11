@@ -134,12 +134,13 @@ int usingScanlineBuffer(int argc,ObjLoader& loader )
         PipLine pipline = PipLine(model,view,project,viewport) ;
         pipline.change(objData) ;
 
+
+        slzBuffer.build(objData,ca.getViewDir()) ;
+        slzBuffer.run(objData,ca.getViewDir(),image1) ;
+
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0) break ;
         Vec2f cursorOffset = window.getOffset() ;
         ca.ProcessMouseMovement(cursorOffset[0],cursorOffset[1],true );
-
-        slzBuffer.build(objData) ;
-        slzBuffer.run(objData,ca.getViewDir(),image1) ;
 
         objData = objData1 ;
         image1.clear();
@@ -300,6 +301,7 @@ int usingHZ(int argc, ObjLoader& loader)
 //    ObjLoader loader("../testData/cube.obj") ;
 //    loader.randomCopy(argc) ;
     ObjData objData = loader.getData() ;
+//    ObjData objData = loader.getData() ;
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
 
@@ -373,7 +375,7 @@ int main(int argc, char** argv)
     ObjLoader loader("../testData/cube.obj") ;
     loader.randomCopy(1000) ;
 //    usingHZ(1000,loader) ;
-    usingScanlineBuffer(1000,loader) ;
+//    usingScanlineBuffer(1000,loader) ;
 //    usingHZandOctree(1000,loader) ;
 }
 
