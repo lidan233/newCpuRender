@@ -89,6 +89,9 @@ else()
     message(STATUS "using mac/linux external")
 endif()
 
-
 add_executable(newCpuRender ${IOdir} ${datatypedir} ${geomdir}  ${renderdir} ${utildir} main.cpp)
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/PROFILE")
+#if (MSVC)
+#    target_link_options(newCpuRender PRIVATE $<$<CONFIG:RELWITHDEBINFO>:/PROFILE>)
+#endif()
 target_link_libraries(newCpuRender SDL2)

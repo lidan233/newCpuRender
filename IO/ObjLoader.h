@@ -22,7 +22,8 @@ private:
     Vec3f pmax = Vec3f(std::numeric_limits<float>::min(),std::numeric_limits<float>::min(),std::numeric_limits<float>::min());
 public:
     ObjLoader(std::string path) ;
-    void randomCopy(int i) ;
+    void randomCopy(int num,Vec3f begin,Vec3f Box) ;
+    void Copy(int i,Vec3f begin,Vec3f Box) ;
     ObjData& getData() { return objdata; }
     Vec3f getCenter() { return center; }
     Vec3f getMin() { return pmin; }

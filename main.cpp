@@ -373,9 +373,12 @@ int main(int argc, char** argv)
     srand(time(NULL)) ;
 //    ObjLoader loader("../testData/lidan.obj") ;
     ObjLoader loader("../testData/cube.obj") ;
-    loader.randomCopy(1000) ;
+    Vec3f begin = Vec3f(-25,-25,-25) ;
+    Vec3f box = Vec3f(50,50,50) ;
+//    loader.randomCopy(1000,begin,box) ;
+    loader.Copy(10, begin, box) ;
 //    usingHZ(1000,loader) ;
-//    usingScanlineBuffer(1000,loader) ;
+    usingScanlineBuffer(1000,loader) ;
 //    usingHZandOctree(1000,loader) ;
 }
 

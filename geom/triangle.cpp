@@ -255,12 +255,12 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
 //                                        temp[1]->getData(),temp[2]->getData());
             if(bscreen.x<-0.01||bscreen.y<-0.01||bscreen.z<-0.010) continue ;
 
-            vector<TGAColor> colors  ;
-            for(int i = 0 ;i<colorsPosition.size();i++)
-            {
-                colors.push_back(textImage.get(colorsPosition[i][0],colorsPosition[i][1])) ;
-            }
-            TGAColor temp = interpolateColor(colors,bscreen) ;
+//            vector<TGAColor> colors  ;
+//            for(int i = 0 ;i<colorsPosition.size();i++)
+//            {
+//                colors.push_back(textImage.get(colorsPosition[i][0],colorsPosition[i][1])) ;
+//            }
+//            TGAColor temp = interpolateColor(colors,bscreen) ;
 
             p.z = 0 ;
             for(int i = 0; i<3 ;i++) p.z += points[points_i[i]].z*bscreen[i];

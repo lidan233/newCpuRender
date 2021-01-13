@@ -1,0 +1,262 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						9
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "external/glm",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						8
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "external/glm"
+				},
+				{
+					"build" : "external/glm/glm",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/glm/glm"
+				},
+				{
+					"build" : "external/glm/test",
+					"childIndexes" : 
+					[
+						4,
+						5,
+						6,
+						7
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/glm/test"
+				},
+				{
+					"build" : "external/glm/test/bug",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "external/glm/test/bug"
+				},
+				{
+					"build" : "external/glm/test/core",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "external/glm/test/core"
+				},
+				{
+					"build" : "external/glm/test/gtc",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "external/glm/test/gtc"
+				},
+				{
+					"build" : "external/glm/test/gtx",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 1,
+					"source" : "external/glm/test/gtx"
+				},
+				{
+					"build" : "external/glm/util",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.6"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "external/glm/util"
+				},
+				{
+					"build" : "external/cxxopts",
+					"childIndexes" : 
+					[
+						10,
+						11
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "external/cxxopts"
+				},
+				{
+					"build" : "external/cxxopts/src",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 9,
+					"projectIndex" : 2,
+					"source" : "external/cxxopts/src",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "external/cxxopts/test",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 9,
+					"projectIndex" : 2,
+					"source" : "external/cxxopts/test",
+					"targetIndexes" : 
+					[
+						1,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "newCpuRender",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					],
+					"name" : "glm",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						9,
+						10,
+						11
+					],
+					"name" : "cxxopts",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 10,
+					"id" : "example::@bcd2ae157a273ec79018",
+					"jsonFile" : "target-example-Debug-0a0eec56e5ccf4086c26.json",
+					"name" : "example",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "link_test::@6b1d09c299b73f2d2224",
+					"jsonFile" : "target-link_test-Debug-c0255c3961d0d70ceb70.json",
+					"name" : "link_test",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "newCpuRender::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-newCpuRender-Debug-ded21017e7cac1e6b9b2.json",
+					"name" : "newCpuRender",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "options_test::@6b1d09c299b73f2d2224",
+					"jsonFile" : "target-options_test-Debug-cb353f495874ade37fe4.json",
+					"name" : "options_test",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/lidan/Desktop/render/newCpuRender/out/build/x64-Debug (默认值)",
+		"source" : "C:/Users/lidan/Desktop/render/newCpuRender"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

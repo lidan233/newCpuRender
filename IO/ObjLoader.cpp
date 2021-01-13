@@ -6,7 +6,77 @@
 #include <stdlib.h>
 #include <time.h>
 
-void ObjLoader::randomCopy(int num)
+void ObjLoader::Copy(int i,Vec3f begin,Vec3f Box)
+{
+    int v_size = objdata.verts_.size() ;
+    int f_size = objdata.faces_.size() ;
+    int i_size = objdata.idxTex_.size() ;
+    int in_size = objdata.idxNorm_.size() ;
+
+    objdata.verts_.reserve(i*i*i*v_size) ;
+    objdata.faces_.reserve(i*i*i*f_size) ;
+    objdata.idxTex_.reserve(i*i*i*i_size) ;
+    objdata.idxNorm_.reserve(i*i*i*in_size) ;
+
+    double tt1 = Box[0] / i ;
+    double tt2 = Box[1] / i ;
+    double tt3 = Box[2] / i ;
+
+    int num = i * i * i ;
+
+    for(int n1 =0 ; n1 < i ; n1++)
+    {
+        for(int n2 =0 ; n2 < i ; n2++)
+        {
+            for(int n3 = 0 ; n3 <i ; n3++)
+            {
+                std::vector<Vec3f> verts_;
+                std::vector<Vec3i> faces_;
+                std::vector<Vec3i> idxTex_;
+                std::vector<Vec3i> idxNorm_;
+
+                Vec3f tv = begin + Vec3f(tt1*n1,tt2*n2,tt3*n3) ;
+//                Vec3f tv = Vec3f((float(rand()%50)-25),(float(rand()%50-25)),(float(rand()%50-25))) ;
+                for(int i = 0 ; i < v_size ; i++)
+                {
+                    Vec3f t1 = objdata.verts_[i] + tv ;
+                    verts_.push_back(t1) ;
+                    this->pmin = min(this->pmin,t1);
+                    this->pmax = max(this->pmax,t1) ;
+
+                }
+
+                objdata.verts_.insert(objdata.verts_.end(),verts_.begin(),verts_.end()) ;
+
+                int size_begin = objdata.verts_.size()  - v_size;
+                for(int i = 0 ; i < f_size ; i++ )
+                {
+                    Vec3i t1 =  objdata.faces_[i] + Vec3i(size_begin,size_begin,size_begin) ;
+                    faces_.push_back(t1) ;
+                }
+                objdata.faces_.insert(objdata.faces_.end(),faces_.begin(),faces_.end()) ;
+
+
+                for(int i = 0 ; i < i_size ; i++ )
+                {
+                    Vec3i t1 =  objdata.idxTex_[i] ;
+                    idxTex_.push_back(t1) ;
+                }
+                objdata.idxTex_.insert(objdata.idxTex_.end(),idxTex_.begin(),idxTex_.end()) ;
+
+
+                for(int i = 0 ; i < in_size ; i++ )
+                {
+                    Vec3i t1 =  objdata.idxNorm_[i] ;
+                    idxNorm_.push_back(t1) ;
+                }
+                objdata.idxNorm_.insert(objdata.idxNorm_.end(),idxNorm_.begin(),idxNorm_.end()) ;
+            }
+        }
+    }
+}
+
+void ObjLoader::randomCopy(int num,Vec3f begin,Vec3f Box)
 {
     srand(time(NULL)) ;
     int v_size = objdata.verts_.size() ;
