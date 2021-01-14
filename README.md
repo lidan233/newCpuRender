@@ -61,7 +61,7 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 以下为三种场景的例子，使用从camera pos发出的平行光为例子（我们同时实现了点光源). 
 ### matrix Cube 
 ![picture 8](images/b7f53d1b595c817322141841c518bae88c5774c9f94f42b1538ec64fa144d920.png)  
-10*10*10个cube构成的矩阵，大量层叠，不小不碎。是ScanLineZbuffer的优势场景。 
+10x10x10个cube构成的矩阵，大量层叠，不小不碎。是ScanLineZbuffer的优势场景。 
 
 ### random matrix cube 
 ![picture 7](images/0f5e4b7b9fc322951eefa8effb3d9887309723da79fdfe0dd4b59ed413d0c492.png)  
@@ -77,5 +77,52 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 
 ## benchmark result for Zbuffers
 
+基于不停操作的100帧统计，AMD3080 CPU, 
+
+matrix Cube 场景:
+12000 face (10x10x10x12) 0.15694 seconds a frame  HZ
+12000 face (10x10x10x12) 0.06204 seconds a frame  SC (cube之间只有遮挡，没有交叠，所以最快)
+12000 face (10x10x10x12) 0.18083 seconds a frame  HZ + OC (遮挡过少，维护数据结构开销更大)
+
+96000 face (20x20x20x12) 0.95646 seconds a frame  HZ 
+96000 face (20x20x20x12) 1.24884 seconds a frame  SC(因为cube太多已经出现同一层之间的大量交叠)
+96000 face (20x20x20x12) 0.74526 seconds a frame  HZ + OC (因为cube已经出现交叠，所以快速拒绝派上了用场)
+
+324000 face  (30x30x30x12) 3.27468 seconds a frame HZ 
+324000 face  (30x30x30x12) 8.22607 seconds a frame SC (因为cube太多已经出现同一层之间的大量交叠)
+324000 face  (30x30x30x12) 1.33333 seconds a frame HZ + OC (交叠越多, 边际成本越低)
 
 
+基于不停操作的100帧统计, random matrix Cube 场景:
+12000 face (10x10x10x12) 0.15059 seconds a frame HZ 
+12000 face (10x10x10x12) 0.06492 seconds a frame SC (因为random所以已经出现交叠)
+12000 face (10x10x10x12) 0.19657 seconds a frame HZ + OC (遮挡过少，维护数据结构开销更大)
+
+96000 face (20x20x20x12) 0.87428 seconds a frame HZ (random的遮挡增加了)
+96000 face (20x20x20x12) 1.62253  seconds a frame SC (random增加了交叠的程度)
+96000 face (20x20x20x12) 0.73281 seconds a frame HZ + OC (random增加了交叠的数目，快速拒绝派上用场)
+
+324000 face  (30x30x30x12)  2.79457 seconds a frame HZ 
+324000 face  (30x30x30x12)  11.8637 seconds a frame SC (random增加了交叠的程度)
+324000 face  (30x30x30x12)  1.30824 seconds a frame HZ + OC (random增加了交叠的数目，快速拒绝派上用场)
+
+
+基于不停操作的100帧统计，random matrix Cube场景 + 墙遮挡
+12000 face (10x10x10x12)  0.37130 seconds a frame HZ 
+12000 face (10x10x10x12)  0.05700 seconds a frame SC 
+12000 face (10x10x10x12)  0.27256 seconds a frame HZ + OC (全部由墙遮挡)
+
+96000 face (20x20x20x12)  0.89561 seconds a frame HZ 
+96000 face (20x20x20x12)  1.03912 seconds a frame SC
+96000 face (20x20x20x12)  0.27923 seconds a frame HZ + OC (全部由墙遮挡, 有了Octree 拒绝速度更快)
+
+324000 face  (30x30x30x12)  1.7794 seconds a frame HZ 
+324000 face  (30x30x30x12)  11.7462 seconds a frame SC 
+324000 face  (30x30x30x12)  0.28172 seconds a frame HZ + OC (全部由墙遮挡)
+
+
+>以上过程使用图表示为:
+
+![Alt text](./fig1.svg)
+
+>如需重新测评, 需要改动代码,命令行封装正在进行. 
