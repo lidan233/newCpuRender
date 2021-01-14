@@ -38,7 +38,7 @@ HierachyZBuffer可以更快地拒绝2d投影盒，但内部像素替换操作的
 ScanlineZBuffer can help render scene without pixel substitusion operation of ZBuffer, but it must build complex data structure. 
 If the objects of your scene are very big, the cost of buildding data structure will be reduced and the cost of buildding stable HierachyZbuffer will be raised.  
 
-ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像，而降低Zbuffer内部的pixel的替换; HKZbuffer通过排序3d box,先光栅化距离视点近的物体最大程度的降低pixel的替换,; 两者均降低了pixel替换的操作数目，但究竟是构建边面表的开销大，还是构造稳定层次Zbuffer的开销大？这一点需要详细的Benchmarker. 但这一疑问仅存在于那些存在大量，大的，互相遮挡物体的场景; 毫无疑问的是，如果你的场景中大量小而碎的物体, 构建ScanlineZbuffer的边表开销要远高于HKZbuffer。因此HKZbuffer的开销最差情况下是Zbuffer的常数倍，下界是简单Zbuffer复杂度的Level的长度倍(Level为层次Zbuffer的层次数)，但是SZBuffer的构建边面表的下界是一个更大的波动范围，在非常碎，链表非常长的情况下，下界是一定可以超过简单Zbuffer复杂度的Level长度倍。 
+ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像，而降低Zbuffer内部的pixel的替换; HKZbuffer通过排序3d box,先光栅化距离视点近的物体最大程度的降低pixel的替换,; 两者均降低了pixel替换的操作数目，但究竟是构建边面表的开销大，还是构造稳定层次Zbuffer的开销大？这一点需要详细的Benchmarker. 但这一疑问仅存在于那些存在大量，大的，互相遮挡物体的场景; 毫无疑问的是，如果你的场景中大量小而碎的物体, 构建ScanlineZbuffer的边表开销要远高于HKZbuffer。因为HKZbuffer的开销最差情况下是Zbuffer的常数倍，下界是简单Zbuffer复杂度的Level的长度倍(Level为层次Zbuffer的层次数)，但是SZBuffer的构建边面表的下界是一个更大的波动范围，在非常碎，链表非常长的情况下，下界是一定可以超过简单Zbuffer复杂度的Level长度倍。 
 值得夸耀的是，我们同时提供了大而互相遮挡，小而碎且互相遮挡的场景做benchmark。 
 
 ## multiply module 
@@ -59,27 +59,29 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 我们提供了三种场景用于Zbuffer算法的benchmark，第一种场景是，大量遮挡的cube场景，第二种场景是小而碎的random场景。 第三种场景是，小而碎，但存在巨大遮挡物体。 
 
 以下为三种场景的例子，使用从camera pos发出的平行光为例子（我们同时实现了点光源). 
-### matrix Cube 
+### matrix Cube 场景 
 ![picture 8](images/b7f53d1b595c817322141841c518bae88c5774c9f94f42b1538ec64fa144d920.png)  
 10x10x10个cube构成的矩阵，大量层叠，不小不碎。是ScanLineZbuffer的优势场景。 
 
-### random matrix cube 
+### random matrix cube 场景
 ![picture 7](images/0f5e4b7b9fc322951eefa8effb3d9887309723da79fdfe0dd4b59ed413d0c492.png)  
 大量随机的，相互交叠的cube构成的场景，小而碎，是为了弄清楚构建复杂边表的开销大，还是构造稳定的HKZbuffer开销大而设立的场景。 
 
-### random matrix cube with big occlusion
+### random matrix cube with big Wall 场景
 ![picture 6](images/495cab4e191f0234407e74ea79e452a372f44cac216e405d0805193ce055d6e6.png)  
 ![picture 9](images/dc507560662c2cda8f706bc5df6e034a2d3fbd249a6cadd3cc760fe7b1a15253.png)  
 
-大量随机的，相互交叠的cube构成的场景，但是存在一个巨大的遮挡物，当这个遮挡物遮挡了大部分的cube的时候，HKZbuffer和Octree的快速拒绝将发挥巨大优势。
+大量随机的，相互交叠的cube构成的场景，但是存在一个巨大的遮挡物(墙)，当这个遮挡物遮挡了大部分的cube的时候，HKZbuffer和Octree的快速拒绝将发挥巨大优势。
 是HKZbuffer+Octree的优势场景。 
 
 
 ## benchmark result for Zbuffers
 
-基于不停操作的100帧统计，AMD3080 CPU, 
+基于动态操作的100帧统计，AMD3080 CPU, 
 
-matrix Cube 场景:
+> - 基于动态操作的100帧统计, matrix Cube 场景:
+
+```C++
 12000 face (10x10x10x12) 0.15694 seconds a frame  HZ
 12000 face (10x10x10x12) 0.06204 seconds a frame  SC (cube之间只有遮挡，没有交叠，所以最快)
 12000 face (10x10x10x12) 0.18083 seconds a frame  HZ + OC (遮挡过少，维护数据结构开销更大)
@@ -91,9 +93,11 @@ matrix Cube 场景:
 324000 face  (30x30x30x12) 3.27468 seconds a frame HZ 
 324000 face  (30x30x30x12) 8.22607 seconds a frame SC (因为cube太多已经出现同一层之间的大量交叠)
 324000 face  (30x30x30x12) 1.33333 seconds a frame HZ + OC (交叠越多, 边际成本越低)
+```
 
 
-基于不停操作的100帧统计, random matrix Cube 场景:
+> - 基于动态操作的100帧统计, random matrix Cube 场景:
+```C++
 12000 face (10x10x10x12) 0.15059 seconds a frame HZ 
 12000 face (10x10x10x12) 0.06492 seconds a frame SC (因为random所以已经出现交叠)
 12000 face (10x10x10x12) 0.19657 seconds a frame HZ + OC (遮挡过少，维护数据结构开销更大)
@@ -105,9 +109,13 @@ matrix Cube 场景:
 324000 face  (30x30x30x12)  2.79457 seconds a frame HZ 
 324000 face  (30x30x30x12)  11.8637 seconds a frame SC (random增加了交叠的程度)
 324000 face  (30x30x30x12)  1.30824 seconds a frame HZ + OC (random增加了交叠的数目，快速拒绝派上用场)
+```
 
 
-基于不停操作的100帧统计，random matrix Cube场景 + 墙遮挡
+
+> - 基于动态操作的100帧统计，random matrix Cube场景 + 墙遮挡
+
+```C++
 12000 face (10x10x10x12)  0.37130 seconds a frame HZ 
 12000 face (10x10x10x12)  0.05700 seconds a frame SC 
 12000 face (10x10x10x12)  0.27256 seconds a frame HZ + OC (全部由墙遮挡)
@@ -120,9 +128,12 @@ matrix Cube 场景:
 324000 face  (30x30x30x12)  11.7462 seconds a frame SC 
 324000 face  (30x30x30x12)  0.28172 seconds a frame HZ + OC (全部由墙遮挡)
 
+```
+
+
 
 >以上过程使用图表示为:
 
 ![Alt text](./fig1.svg)
-
+>HZ代表层次ZBuffer,SC代表扫描线Zbuffer,HZ_OC代表层次+八叉树. 
 >如需重新测评, 需要改动代码,命令行封装正在进行. 
