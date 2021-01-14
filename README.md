@@ -77,7 +77,7 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 
 ## benchmark result for Zbuffers
 
-基于动态操作的100帧统计，AMD3080 CPU, 
+每个结果都是基于动态操作的100帧统计平均时间;测试环境为 AMD3080 CPU;测评结果中的HZ代表层次ZBuffer, SC代表扫描线算法,HZ+OC代表扫描线算法和八叉树结合. 
 
 > - 基于动态操作的100帧统计, matrix Cube 场景:
 
