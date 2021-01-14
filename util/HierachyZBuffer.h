@@ -163,15 +163,12 @@ public:
 
     bool cover(int x,int y ,float depth)
     {
-//        if(canCover(x,y,depth)) {
             (*(buffer[0]))[x][y] = depth;
 #ifdef LOG
             std::cout<<"level "<<0<<"change "<<x<<" "<<y<<" using depth"<< depth <<std::endl ;
 #endif
             coverReset(x,y,0) ;
             return true ;
-//        }
-//        return false ;
     }
 
 

@@ -339,30 +339,37 @@ int usingZbufferToRenderImage() {
 int main(int argc, char** argv)
 {
     srand(time(NULL)) ;
-//    ObjLoader  loader("../testData/li dan.obj") ;
-    ObjLoader loader("../testData/cube.obj") ;
+//    ObjLoader loader("../testData/cube.obj") ;
+    ObjLoader loader("../testData/lidan.obj") ;
     Vec3f begin = Vec3f(-25,-25,-25) ;
     Vec3f box = Vec3f(50,50,50) ;
 
-
+// 设定场景2: 加入1000 个random matrix cube
 //    loader.randomCopy(1000,begin,box) ;
 //    loader.randomCopy(8000,begin,box) ;
-    loader.randomCopy(27000,begin,box) ;
+//    loader.randomCopy(27000,begin,box) ;
 
+//设定场景1  加入10*10*10 个matrix cube
     //    loader.Copy(10, begin, box) ;
     //    loader.Copy(20, begin, box) ;
     //    loader.Copy(30, begin, box) ;
 
 
-//    loader.randomCopy(1000,begin,box) ;
+// 设定场景3: 加墙
+//    loader.appendData("../testData/cube1.obj") ;
+// 加人头(非凸多面体)
+    loader.appendData("../testData/lidan.obj") ;
 
-    loader.appendData("../testData/cube1.obj") ;
-//    loader.appendData("../testData/lidan.obj") ;
 
 
-//    usingHZ(1000,loader) ;
+// 使用HZ buffer
+    usingHZ(1000,loader) ;
+
+// 使用扫描线Zbuffer
 //     usingScanlineBuffer(1000,loader) ;
-     usingHZandOctree(1000,loader) ;
+
+// 使用扫描线Zbuffer+Octree
+//     usingHZandOctree(1000,loader) ;
 }
 
 

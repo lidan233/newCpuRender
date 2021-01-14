@@ -21,7 +21,7 @@ const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
 //Vec3f light_dir = Vec3f(1,-1,1).normalize();
-Vec3f camera_pos(0,0,50) ;
+Vec3f camera_pos(0,0,3) ;
 Vec3f eye(1,1,3);
 Vec3f center(0,0,0);
 Vec3f up(0,1,0);

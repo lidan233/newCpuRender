@@ -1,5 +1,5 @@
-# Render based CPU 
-In this render, I implement a  a scalable and powerful rasterization program with  SDL2, C++ standard library, openmp. 
+# Rasterizatizer based CPU 
+In this rasterizatizer, I implement a  a scalable and powerful rasterization program with  SDL2, C++ standard library, openmp. 
 This render can support kinds of ZBuffer, just like Zbuffer, Hierachy ZBuffer, Scanline ZBuffer, and Hierachy ZBuffer with Octree.
 This render can support multiple mode to render geometry data， just like point, line, and face.
 This render can also support cut screen. 
@@ -7,11 +7,11 @@ At the last of README, we provide a benchmark of different ZBuffer based on diff
 
 在这个软光栅中，我用SDL2、C++标准库、OpenMP实现了一个可扩展和效果较好的的光栅化程序。
 该软光栅可以支持多种ZBuffer，比如ZBuffer、Hierachy ZBuffer、Scanline ZBuffer和Hierachy ZBuffer with Octree。
-这种渲染可以支持多种模式来渲染几何体数据，比如点、线和面。
+该软光栅可以支持多种模式来渲染几何体数据，比如点、线和面。
 此渲染还可以支持剪切屏幕。
-在自述文件的最后，我们提供了一个基于不同场景的多种ZBuffer的对比。
+在自述文件的最后，我们提供了一个基于不同场景的多种ZBuffer的对比结果，包括Hierachy ZBuffer、Scanline ZBuffer和Hierachy ZBuffer with Octree。
 
-## multiply ZBuffers 
+## multiply ZBuffers (多种Zbuffer原理简单介绍与性能分析)
 These a simple instruction of different ZBuffers. 
 下面我们对不同的Zbuffer做简单介绍和性能简单分析。
 
@@ -38,46 +38,45 @@ HierachyZBuffer可以更快地拒绝2d投影盒，但内部像素替换操作的
 ScanlineZBuffer can help render scene without pixel substitusion operation of ZBuffer, but it must build complex data structure. 
 If the objects of your scene are very big, the cost of buildding data structure will be reduced and the cost of buildding stable HierachyZbuffer will be raised.  
 
-ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像，而降低Zbuffer内部的pixel的替换; HKZbuffer通过排序3d box,先光栅化距离视点近的物体最大程度的降低pixel的替换,; 两者均降低了pixel替换的操作数目，但究竟是构建边面表的开销大，还是构造稳定层次Zbuffer的开销大？这一点需要详细的Benchmarker. 但这一疑问仅存在于那些存在大量，大的，互相遮挡物体的场景; 毫无疑问的是，如果你的场景中大量小而碎的物体, 构建ScanlineZbuffer的边表开销要远高于HKZbuffer。因为HKZbuffer的开销最差情况下是Zbuffer的常数倍，下界是简单Zbuffer复杂度的Level的长度倍(Level为层次Zbuffer的层次数)，但是SZBuffer的构建边面表的下界是一个更大的波动范围，在非常碎，链表非常长的情况下，下界是一定可以超过简单Zbuffer复杂度的Level长度倍。 
+ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像，而降低Zbuffer内部的pixel的替换; HierachyZBuffer 通过排序3d box,先光栅化距离视点近的物体最大程度的降低pixel的替换,; 两者均降低了pixel替换的操作数目，但究竟是构建边面表的开销大，还是构造稳定层次Zbuffer的开销大？这一点需要详细的Benchmark. 但这一疑问仅存在于那些存在大量，大的，互相遮挡物体的场景; 毫无疑问的是，如果你的场景中大量小而碎的物体, 构建ScanlineZbuffer的边表开销要远高于HierachyZBuffer 。因为HierachyZBuffer 的开销最差情况下是Zbuffer的常数倍，下界是简单Zbuffer复杂度的Level的长度倍(Level为层次Zbuffer的层次数)，但是SZBuffer的构建边面表的下界是一个更大的波动范围，在非常碎，链表非常长的情况下，下界是一定可以超过简单Zbuffer复杂度的Level长度倍。 
 值得夸耀的是，我们同时提供了大而互相遮挡，小而碎且互相遮挡的场景做benchmark。 
 
-## multiply module 
+## multiply module （多种光栅化模式）
 
 ### point 
-在geom的Point类中，实现了经典的画点的算法, 供您实现您的需求。 
+在geom文件夹的Point类中，实现了经典的画点的算法, 供您实现您的需求。 
 
 ### line 
-在geom的Line类中，实现了经典的画线算法，供您实现您的需求。 
+在geom文件夹的Line类中，实现了经典的画线算法，供您实现您的需求。 
 
 ### face 
-在geom的triangle类中，我们实现了经典的画三角形的算法，供您实现您的需求。 
+在geom文件夹的triangle类中，我们实现了经典的画三角形的算法，供您实现您的需求。 
 
 这意味着，我们的软光栅提供了画 点，线，面的全面功能。 
 
 ## benchmark
 
-我们提供了三种场景用于Zbuffer算法的benchmark，第一种场景是，大量遮挡的cube场景，第二种场景是小而碎的random场景。 第三种场景是，小而碎，但存在巨大遮挡物体。 
+我们提供了三种场景用于Zbuffer算法的benchmark，第一种场景是，大量遮挡但少量交叠的matrix cube场景，第二种场景是小而碎的大量交叠的random matrix cube场景。 第三种场景是，小而碎的random matrix cube场景，但存在巨大遮挡物体（一面墙）。 
 
-以下为三种场景的例子，使用从camera pos发出的平行光为例子（我们同时实现了点光源). 
+以下为三种场景的例子，我们使用从camera pos发出的平行光计算光照结果并光栅化得到图片（我们同时实现了点光源效果)。
 ### matrix Cube 场景 
 ![picture 8](images/b7f53d1b595c817322141841c518bae88c5774c9f94f42b1538ec64fa144d920.png)  
-10x10x10个cube构成的矩阵，大量层叠，不小不碎。是ScanLineZbuffer的优势场景。 
+10 x 10 x 10个cube构成的matrix，大量遮挡，少量交叠，理论上是ScanLine Zbuffer的优势场景。 
 
 ### random matrix cube 场景
 ![picture 7](images/0f5e4b7b9fc322951eefa8effb3d9887309723da79fdfe0dd4b59ed413d0c492.png)  
-大量随机的，相互交叠的cube构成的场景，小而碎，是为了弄清楚构建复杂边表的开销大，还是构造稳定的HKZbuffer开销大而设立的场景。 
+这是我们设定的，大量随机的相互交叠的cube构成的场景，场景种的物体小而碎。设定这个场景是为了弄清楚构建复杂边表的开销大，还是构造稳定的HierachyZBuffer 开销大。
 
 ### random matrix cube with big Wall 场景
 ![picture 6](images/495cab4e191f0234407e74ea79e452a372f44cac216e405d0805193ce055d6e6.png)  
 ![picture 9](images/dc507560662c2cda8f706bc5df6e034a2d3fbd249a6cadd3cc760fe7b1a15253.png)  
 
-大量随机的，相互交叠的cube构成的场景，但是存在一个巨大的遮挡物(墙)，当这个遮挡物遮挡了大部分的cube的时候，HKZbuffer和Octree的快速拒绝将发挥巨大优势。
-是HKZbuffer+Octree的优势场景。 
+大量随机的，相互交叠的cube构成的场景，但是存在一个巨大的遮挡物(墙)，当这个遮挡物遮挡了大部分的cube的时候，HierachyZBuffer 和Octree结合，所带来的快速拒绝将发挥巨大优势。该场景是HKZbuffer+Octree的优势场景。 
 
 
 ## benchmark result for Zbuffers
 
-每个结果都是基于动态操作的100帧统计平均时间;测试环境为 AMD3080 CPU;测评结果中的HZ代表层次ZBuffer, SC代表扫描线算法,HZ+OC代表扫描线算法和八叉树结合. 
+每个结果都是基于动态操作的100帧统计平均时间; 测试环境为 AMD3080 CPU; 测评结果中的HZ代表层次ZBuffer, SC代表扫描线ZBuffer, HZ+OC代表层次ZBuffer算法和八叉树结合. 
 
 > - 基于动态操作的100帧统计, matrix Cube 场景:
 
@@ -135,11 +134,11 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 >以上过程使用图表示为:
 
 ![Alt text](./fig1.svg)
->HZ代表层次ZBuffer,SC代表扫描线Zbuffer,HZ_OC代表层次+八叉树. 
+>1. HZ代表层次HierachyZBuffer ,SC代表扫描线ScanlineZBuffer,HZ_OC代表HierachyZBuffer +Octree. 
 
->横坐标代表面片数,纵坐标代表渲染一帧的时间(秒)
+>2. 横坐标代表面片数,纵坐标代表渲染一帧的时间(秒)
 
->如需重新测评, 需要改动代码,命令行封装正在进行. 
+>3. 如需重新测评, 需要根据main函数注释改动代码,代码的命令行封装版本正在进行. 
 >
 >
 
@@ -147,6 +146,12 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 根据以上图标中的信息,即在不同场景中,三种方案的时间表现,我们得出如下结论. 
 > - 1. 物体交叠越剧烈,使用层次Zbuffer和八叉树结合的性能就越出色. 
 > - 2. 如果物体只是遮挡,没有特别明显的交叠,那么扫描线也会很出色. 
-> - 3. 总的来说,随着面片数的增加,**构建边面表**的开销会远远超过**通过Octree构建稳定HKZbuffer**的开销. 
-> - 4. 总的来说,场景越密,越多交叠,那么在层次Zbuffer基础上加入Octree剖分的需求就越剧烈. 
-> - 5. 总的来说, HKZbuffer在密集场景中的表现比Scanline好的多. 
+> - 3. 总的来说,随着面片数的增加,**构建边面表**的开销会远远超过**通过Octree构建稳定HierachyZBuffer **的开销. 
+> - 4. 总的来说,场景越密,越多交叠,那么在层次Zbuffer基础上加入Octree场景剖分的需求就越剧烈. 
+> - 5. 总的来说, HierachyZBuffer 在密集场景中的表现比ScanlineZBuffer好的多. 
+
+## 关于非凸多面体的说明
+
+算法同样包含非凸多面体人头(testData/lidan.obj)，如下图所示：
+![picture 1](images/d58f3189af75a26c720aa994c049540a74003f4b7ba618674b5afc04252f39c3.png)  
+但是非凸多面体不利于整个的统计与分析，故没有做非凸多面体的测试，而选择了四边形。 
