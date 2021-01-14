@@ -208,7 +208,7 @@ int usingHZandOctree(int argc,ObjLoader& loader )
         std::cout<<"this vertex i "<<objData.verts_[i]<<std::endl;
     }
 #endif
-
+        int renderface = 0 ;
         std::stack<std::pair<OcNode*,int>> stk ;
         stk.push(std::pair<OcNode*,int>(root,0)) ;
         while(stk.size()!=0)
@@ -230,46 +230,53 @@ int usingHZandOctree(int argc,ObjLoader& loader )
                     continue ;
                 }
             }
+            BoundingBox* t4 = newNode->getBox() ;
+            BoundingBox* t5 = pipline.change(*t4) ;
 
-            // if this node is a leaf node, so we decided to render, else push as the iterator
-            if(newNode->isLeafNode())
+            Vec3f minb = t5->getPmin() ;
+            Vec3f maxb = t5->getPmax() ;
+//            std::cout<<"input newNode"<<minb<<" "<<maxb<<std::endl ;
+
+            // 只有不能拒绝的时候，才接下去干
+            if(newNode->getFaceSize()>0 && !hzBuffer->canRejectBox(t5->getPmin(),t5->getPmax(),t5->getPmin()[2]))
             {
-                if(newNode->getFaces_size()<=0) continue ;
-                BoundingBox* t = newNode->getBox() ;
-                BoundingBox* t1 = pipline.change(*t) ;
-
-                if(!hzBuffer->canRejectBox(t1->getPmin(),t1->getPmax(),t1->getPmin()[2]))
+                std::cout<<"can't reject"<<std::endl ;
+                if(newNode->isLeafNode())
                 {
-                    std::vector<int>& allData = *(newNode->getFaces());
-                    for(int i = 0 ; i < allData.size() ; i++)
-                    {
-//                        std::cout<<" render "<<allData[i]<<" triangle"<<std::endl ;
-                        renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
-                    }
-                }else{
-#ifdef LOG
-                    Vec3f t2 = t1->getPmin() ;
-                    Vec3f t3 = t1->getPmax() ;
-                    std::cout<<"reject "<<t2<<" "<<t3<<std::endl ;
-#endif
-                }
+                    if(newNode->getFaces_size()<=0) continue ;
+//                    BoundingBox* t = newNode->getBox() ;
+//                    BoundingBox* t1 = pipline.change(*t) ;
 
-            }else{
-
-                BoundingBox* t = newNode->getBox() ;
-                BoundingBox* t1 = pipline.change(*t) ;
-                if(newNode->getFaceSize()>0 && !hzBuffer->canRejectBox(t1->getPmin(),t1->getPmax(),t1->getPmin()[2]))
-                {
-                    std::pair<OcNode*,int> tt = std::pair<OcNode*,int>(newNode,0) ;
-                    stk.push(tt) ;
-//                std::cout<<"push" <<newNode->getId()<<std::endl;
+//                    if(!hzBuffer->canRejectBox(t5->getPmin(),t5->getPmax(),t5->getPmin()[2]))
+//                    {
+                        std::vector<int>& allData = *(newNode->getFaces());
+                        for(int i = 0 ; i < allData.size() ; i++)
+                        {
+    //                        std::cout<<" render "<<allData[i]<<" triangle"<<std::endl ;
+                            renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
+    //                        renderface++ ;
+    //                        if(renderface>1000) break ;
+                        }
+//                    }else{
+    #ifdef LOG
+                        Vec3f t2 = t1->getPmin() ;
+                        Vec3f t3 = t1->getPmax() ;
+                        std::cout<<"reject "<<t2<<" "<<t3<<std::endl ;
+    #endif
+//                    }
+    //                break ;
+                    std::cout<<"render over"<<std::endl ;
+                    hzBuffer->to_string() ;
+                    break ;
                 }else{
-//                    std::cout<<"reject"<<std::endl ;
+                        std::pair<OcNode*,int> tt = std::pair<OcNode*,int>(newNode,0) ;
+                        stk.push(tt) ;
+    //                std::cout<<"push" <<newNode->getId()<<std::endl;
                 }
             }
         }
 
-        std::cout<<std::endl ;
+        std::cout<<std::endl<<std::endl<<std::endl<<std::endl ;
 
         srand(time(NULL) ) ;
         long starttime = time(NULL) ;
@@ -347,6 +354,7 @@ int usingHZ(int argc, ObjLoader& loader)
 
 //            renderToImage(objData,image1,image,i,zBuffer) ;
             renderToImageHZ(objData,image1,image,i,hzBuffer) ;
+//            if(i>10000) break ;
         }
 //        image1.flip_vertically();
 //        image1.write_tga_file("output1.tga");
@@ -375,11 +383,12 @@ int main(int argc, char** argv)
     ObjLoader loader("../testData/cube.obj") ;
     Vec3f begin = Vec3f(-25,-25,-25) ;
     Vec3f box = Vec3f(50,50,50) ;
-//    loader.randomCopy(1000,begin,box) ;
-    loader.Copy(10, begin, box) ;
+    loader.randomCopy(300000,begin,box) ;
+//    loader.Copy(30, begin, box) ;
+    loader.appendData("../testData/cube1.obj") ;
 //    usingHZ(1000,loader) ;
-    usingScanlineBuffer(1000,loader) ;
-//    usingHZandOctree(1000,loader) ;
+//    usingScanlineBuffer(1000,loader) ;
+    usingHZandOctree(1000,loader) ;
 }
 
 

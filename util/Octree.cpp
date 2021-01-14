@@ -219,7 +219,7 @@ OcNode* OcNode::getNext(int index, Vec3f viewdir)
             if(children_s[j]==nullptr) return true ;
             float v1 = children_s[i]->box->getPmid() * viewdir  ;
             float v2 = children_s[j]->box->getPmid() * viewdir  ;
-            return v1 > v2 ;
+            return v1 < v2 ;
         }) ;
     }
 
@@ -231,7 +231,7 @@ OcNode* OcNode::getNext(int index, Vec3f viewdir)
             if(children_s[j]==nullptr) return true ;
             float v1 = children_s[i]->box->getPmid() * viewdir  ;
             float v2 = children_s[j]->box->getPmid() * viewdir  ;
-            return v1 > v2 ;
+            return v1 < v2 ;
         }) ;
     }
 

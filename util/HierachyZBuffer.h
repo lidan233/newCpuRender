@@ -24,8 +24,8 @@ private:
 
     bool canRejectBox_level(int level, Vec2f min, Vec2f max, float depth)
     {
-        min = Vec::max(min,Vec2f(0.0,0.0)) ;
-        max = Vec::max(max,Vec2f(0.0,0.0)) ;
+        min = Vec::max(min,Vec2f(1.0,1.0)) ;
+        max = Vec::max(max,Vec2f(1.0,1.0)) ;
         if(level==0) return false ;
 
         for(int i = min[0] ; i < max[0] ; i++)
@@ -34,7 +34,10 @@ private:
             {
                 // we can't reject
                 // 只要我最小的depth 小于其中一个depth 就不能reject
-                if((*(buffer[level]))[i][j] > depth) return false ;
+                if(double((*(buffer[level]))[i][j]) - double(depth) > 0.001){
+                    std::cout<<"because level: "<<level<<" "<<i<<" "<<j<<" "<<(*(buffer[level]))[i][j]<< " is bigger than "<<depth<<std::endl ;
+                    return false ;
+                }
             }
         }
         //we can reject
@@ -73,6 +76,23 @@ public:
         }
 
     }
+    void to_string()
+    {
+        for(int i = minlevel-1 ; i >= 0  ;i--)
+        {
+            std::cout<<"from level "<<i<<std::endl ;
+            buffer[i] = new ZBuffer(begin_height[i], begin_width[i]) ;
+            for(int m = 0 ; m < begin_height[i]; m++)
+            {
+                for(int n = 0  ; n< begin_width[i] ; n++)
+                {
+//                    std::cout<<" level: "<< i << " x :"<<m<<" y :"<<n<<(*buffer[i])[m][n]<<std::endl ;
+                    std::cout<<(*buffer[i])[m][n]<<" ";
+                }
+                std::cout<<std::endl ;
+            }
+        }
+    }
 
     void clear()
     {
@@ -100,8 +120,10 @@ public:
     {
         if((*(buffer[0]))[x][y] <= depth)
         {
+            std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
             return false;
         }
+        std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
         return true ;
     }
 
@@ -137,15 +159,15 @@ public:
 
     bool cover(int x,int y ,float depth)
     {
-        if(canCover(x,y,depth)) {
+//        if(canCover(x,y,depth)) {
             (*(buffer[0]))[x][y] = depth;
 #ifdef LOG
             std::cout<<"level "<<0<<"change "<<x<<" "<<y<<" using depth"<< depth <<std::endl ;
 #endif
             coverReset(x,y,0) ;
             return true ;
-        }
-        return false ;
+//        }
+//        return false ;
     }
 
 
