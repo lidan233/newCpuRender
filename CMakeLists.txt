@@ -61,8 +61,8 @@ ADD_SUBSRC(IOdir IO )
 #ADD_SUBSRC(testDatadir testData)
 
 
-add_subdirectory(external/glm)
-add_subdirectory(external/cxxopts)
+#add_subdirectory(external/glm)
+#add_subdirectory(external/cxxopts)
 #add_subdirectory(external/googletest)
 
 include_directories(

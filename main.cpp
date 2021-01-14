@@ -10,7 +10,6 @@
 #include "Timer.h"
 #include "ScanlineZbuffer.h"
 
-#include <glm/gtx/string_cast.hpp>
 #include <stack>
 
 #define NOLOG
@@ -233,8 +232,7 @@ int usingHZandOctree(int argc,ObjLoader& loader )
                 }
             }
         }
-        
-        long starttime = time(NULL) ;
+
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0)
             break ;
         Vec2f cursorOffset = window.getOffset() ;

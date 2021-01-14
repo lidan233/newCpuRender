@@ -7,8 +7,8 @@
 #include "Vec.h"
 #include "manipulation.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/glm.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
 
 enum NCamera_Movement {
     ZERO,
