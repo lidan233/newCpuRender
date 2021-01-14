@@ -345,8 +345,8 @@ int main(int argc, char** argv)
     Vec3f box = Vec3f(50,50,50) ;
 //    loader.randomCopy(1000,begin,box) ;
     loader.Copy(10, begin, box) ;
-//    loader.appendData("../testData/cube1.obj") ;
-    loader.appendData("../testData/lidan.obj") ;
+    loader.appendData("../testData/cube1.obj") ;
+//    loader.appendData("../testData/lidan.obj") ;
     usingHZ(1000,loader) ;
 //    usingScanlineBuffer(1000,loader) ;
 //    usingHZandOctree(1000,loader) ;

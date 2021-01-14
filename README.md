@@ -69,6 +69,8 @@ ScanlineZbuffer通过构造复杂的边面表，从而保证一次生成图像�
 
 ### random matrix cube with big occlusion
 ![picture 6](images/495cab4e191f0234407e74ea79e452a372f44cac216e405d0805193ce055d6e6.png)  
+![picture 9](images/dc507560662c2cda8f706bc5df6e034a2d3fbd249a6cadd3cc760fe7b1a15253.png)  
+
 大量随机的，相互交叠的cube构成的场景，但是存在一个巨大的遮挡物，当这个遮挡物遮挡了大部分的cube的时候，HKZbuffer和Octree的快速拒绝将发挥巨大优势。
 是HKZbuffer+Octree的优势场景。 
 
