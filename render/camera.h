@@ -91,15 +91,14 @@ public:
     {
         float velocity = MovementSpeed * deltaTime;
         if (direction == FORWARD)
-            Position = Position + Front * velocity;
+            Pitch += 100*MouseSensitivity;
         if (direction == BACKWARD)
-            Position = Position -  Front * velocity;
+            Pitch -= 100*MouseSensitivity;
         if (direction == LEFT)
-            Position = Position - Right * velocity;
+            Yaw   -= 100*MouseSensitivity;
         if (direction == RIGHT)
-            Position = Position + Right * velocity;
-
-        radius = (Target - Position).norm() ;
+            Yaw   += 100*MouseSensitivity;
+        updateCameraVectors();
 //        log(INFO," " +std::to_string(Position[0]) +" " +std::to_string(Position[1])+" " +std::to_string(Position[2]));
     }
 

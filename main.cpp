@@ -3,7 +3,6 @@
 #include "Line.h"
 #include "render.h"
 #include "triangle.h"
-#include "camera.h"
 #include "pipline.h"
 #include "window.h"
 #include "HierachyZBuffer.h"
@@ -13,24 +12,6 @@
 
 #include <glm/gtx/string_cast.hpp>
 #include <stack>
-#include <omp.h>
-
-
-const int width = 1024;
-const int height = 1024 ;
-const int depth = 255  ;
-
-//Vec3f light_dir(0,0,-1) ;
-//Vec3f light_dir = Vec3f(1,-1,1).normalize();
-Vec3f camera_pos(0,0,50) ;
-Vec3f eye(1,1,3);
-Vec3f center(0,0,0);
-Vec3f up(0,1,0);
-Vec3f light_dir = camera_pos - center ;
-float yaw = NYAW ;
-float pitch = NPITCH ;
-camera ca(camera_pos,up,center,yaw,pitch) ;
-
 
 #define NOLOG
 
@@ -68,9 +49,7 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
     Triangle d(index3) ;
 
     if(intensity[0]+intensity[1]+intensity[2]>0)
-//            d.draw(image1,*zBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],image ) ;
         d.draw_hierachy_zbuffer(renderimage,(*hzBuffer), t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
-//    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,1,textureImage) ;
 
 }
 
@@ -151,16 +130,12 @@ int usingScanlineBuffer(int argc,ObjLoader& loader )
     return 0 ;
 }
 
-// Using
 #ifdef __cplusplus
 extern "C"
 #endif
 int usingHZandOctree(int argc,ObjLoader& loader )
 {
 
-//    srand(time(NULL)) ;
-//    ObjLoader loader(path) ;
-//    loader.randomCopy(argc) ;
     ObjData objData = loader.getData() ;
 
     ObjData objData1 = objData ;
@@ -208,7 +183,6 @@ int usingHZandOctree(int argc,ObjLoader& loader )
         std::cout<<"this vertex i "<<objData.verts_[i]<<std::endl;
     }
 #endif
-        int renderface = 0 ;
         std::stack<std::pair<OcNode*,int>> stk ;
         stk.push(std::pair<OcNode*,int>(root,0)) ;
         while(stk.size()!=0)
@@ -226,59 +200,40 @@ int usingHZandOctree(int argc,ObjLoader& loader )
 
                 if(newNode==nullptr)  {
                     stk.pop() ;
-//                std::cout<<"pop"<<t.first->getId()<<std::endl;
                     continue ;
                 }
             }
             BoundingBox* t4 = newNode->getBox() ;
             BoundingBox* t5 = pipline.change(*t4) ;
 
+#ifdef LOG
             Vec3f minb = t5->getPmin() ;
             Vec3f maxb = t5->getPmax() ;
-//            std::cout<<"input newNode"<<minb<<" "<<maxb<<std::endl ;
+            std::cout<<"input newNode"<<minb<<" "<<maxb<<std::endl ;
+#endif
 
-            // 只有不能拒绝的时候，才接下去干
             if(newNode->getFaceSize()>0 && !hzBuffer->canRejectBox(t5->getPmin(),t5->getPmax(),t5->getPmin()[2]))
             {
-//                std::cout<<"can't reject"<<std::endl ;
                 if(newNode->isLeafNode())
                 {
                     if(newNode->getFaces_size()<=0) continue ;
-//                    BoundingBox* t = newNode->getBox() ;
-//                    BoundingBox* t1 = pipline.change(*t) ;
-
-//                    if(!hzBuffer->canRejectBox(t5->getPmin(),t5->getPmax(),t5->getPmin()[2]))
-//                    {
                         std::vector<int>& allData = *(newNode->getFaces());
                         for(int i = 0 ; i < allData.size() ; i++)
                         {
-    //                        std::cout<<" render "<<allData[i]<<" triangle"<<std::endl ;
                             renderToImageHZ(objData,image1,image,allData[i],hzBuffer) ;
-    //                        renderface++ ;
-    //                        if(renderface>1000) break ;
                         }
-//                    }else{
     #ifdef LOG
                         Vec3f t2 = t1->getPmin() ;
                         Vec3f t3 = t1->getPmax() ;
                         std::cout<<"reject "<<t2<<" "<<t3<<std::endl ;
     #endif
-//                    }
-    //                break ;
-//                    std::cout<<"render over"<<std::endl ;
-//                    hzBuffer->to_string() ;
-//                    break ;
                 }else{
                         std::pair<OcNode*,int> tt = std::pair<OcNode*,int>(newNode,0) ;
                         stk.push(tt) ;
-    //                std::cout<<"push" <<newNode->getId()<<std::endl;
                 }
             }
         }
-
-        std::cout<<std::endl<<std::endl<<std::endl<<std::endl ;
-
-        srand(time(NULL) ) ;
+        
         long starttime = time(NULL) ;
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0)
             break ;
@@ -304,11 +259,7 @@ extern "C"
 #endif
 int usingHZ(int argc, ObjLoader& loader)
 {
-//    srand(time(NULL)) ;
-//    ObjLoader loader("../testData/cube.obj") ;
-//    loader.randomCopy(argc) ;
     ObjData objData = loader.getData() ;
-//    ObjData objData = loader.getData() ;
     ObjData objData1 = objData ;
     Vec3f centerM = loader.getCenter() ;
 
@@ -351,14 +302,8 @@ int usingHZ(int argc, ObjLoader& loader)
         int size = objData.faces_.size() ;
         for(int i = 0; i< size;i++)
         {
-
-//            renderToImage(objData,image1,image,i,zBuffer) ;
             renderToImageHZ(objData,image1,image,i,hzBuffer) ;
-//            if(i>10000) break ;
         }
-//        image1.flip_vertically();
-//        image1.write_tga_file("output1.tga");
-//        long starttime = time(NULL) ;
         if(window.render(reinterpret_cast<Uint32*>(image1.buffer()))<0)
             break ;
         Vec2f cursorOffset = window.getOffset() ;
@@ -375,32 +320,7 @@ int usingHZ(int argc, ObjLoader& loader)
     return 0 ;
 }
 
-
-int main(int argc, char** argv)
-{
-    srand(time(NULL)) ;
-//    ObjLoader loader("../testData/lidan.obj") ;
-    ObjLoader loader("../testData/cube.obj") ;
-    Vec3f begin = Vec3f(-25,-25,-25) ;
-    Vec3f box = Vec3f(50,50,50) ;
-    loader.randomCopy(20000,begin,box) ;
-//    loader.Copy(30, begin, box) ;
-    loader.appendData("../testData/cube1.obj") ;
-//    usingHZ(1000,loader) ;
-//    usingScanlineBuffer(1000,loader) ;
-    usingHZandOctree(1000,loader) ;
-}
-
-
-// using test some class: HierachyZBuffer
-int main1(int argc, char** argv)
-{
-    HierachyZBuffer buffer = HierachyZBuffer(800,800) ;
-    buffer.cover(1,2,100) ;
-    return 0 ;
-}
-
-int main4(int argc, char** argv) {
+int usingZbufferToRenderImage() {
     TGAImage image(width, height, TGAImage::RGB);
     image.set(0, 0, red);
 
@@ -416,3 +336,22 @@ int main4(int argc, char** argv) {
     image.write_tga_file("output.tga");
     return 0;
 }
+
+
+int main(int argc, char** argv)
+{
+    srand(time(NULL)) ;
+//    ObjLoader loader("../testData/lidan.obj") ;
+    ObjLoader loader("../testData/cube.obj") ;
+    Vec3f begin = Vec3f(-25,-25,-25) ;
+    Vec3f box = Vec3f(50,50,50) ;
+//    loader.randomCopy(1000,begin,box) ;
+    loader.Copy(10, begin, box) ;
+//    loader.appendData("../testData/cube1.obj") ;
+    loader.appendData("../testData/lidan.obj") ;
+//    usingHZ(1000,loader) ;
+//    usingScanlineBuffer(1000,loader) ;
+    usingHZandOctree(1000,loader) ;
+}
+
+
