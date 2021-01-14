@@ -116,6 +116,28 @@ public:
         }
     }
 
+    void change(ObjData& objData,std::vector<int>& faceIndex)
+    {
+//        for(int i = 0 ; i < faceIndex.size() ; i++)
+//        {
+//            Vec3i faceIndex = objData.faces_[faceIndex[i]] ;
+//            for(int i = 0 ; i< 3; i++)
+//            {
+//                objData.verts_[faceIndex[0]] ;
+//                objData.verts_[faceIndex[0]] ;
+//                objData.verts_[faceIndex[0]] ;
+//            }
+//        }
+
+        for(int i = 0 ;i< objData.verts_.size();i++)
+        {
+
+//            std::cout<<" change point from"<<objData.verts_[i]<<std::endl ;
+            Matrix41 screen = manipulation::v2m(objData.verts_[i]) ;
+            objData.verts_[i] = manipulation::m2v(result*screen) ;
+//            std::cout<<" change point to"<<objData.verts_[i]<<std::endl ;
+        }
+    }
 
 };
 #endif //NEWCPURENDER_PIPLINE_H

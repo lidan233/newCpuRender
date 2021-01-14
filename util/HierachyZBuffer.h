@@ -17,15 +17,15 @@
 
 class HierachyZBuffer : public Buffer{
 private:
-
+    int image_height, image_width ;
     int *begin_height, *begin_width ;
     int minlevel ;
     ZBuffer** buffer = nullptr ;
 
     bool canRejectBox_level(int level, Vec2f min, Vec2f max, float depth)
     {
-        min = Vec::max(min,Vec2f(1.0,1.0)) ;
-        max = Vec::max(max,Vec2f(1.0,1.0)) ;
+        min = Vec::max(min,Vec2f(0.0,0.0)) ;
+        max = Vec::max(max,Vec2f(0.0,0.0)) ;
         if(level==0) return false ;
 
         for(int i = min[0] ; i < max[0] ; i++)
@@ -35,7 +35,7 @@ private:
                 // we can't reject
                 // 只要我最小的depth 小于其中一个depth 就不能reject
                 if(double((*(buffer[level]))[i][j]) - double(depth) > 0.001){
-                    std::cout<<"because level: "<<level<<" "<<i<<" "<<j<<" "<<(*(buffer[level]))[i][j]<< " is bigger than "<<depth<<std::endl ;
+//                    std::cout<<"because level: "<<level<<" "<<i<<" "<<j<<" "<<(*(buffer[level]))[i][j]<< " is bigger than "<<depth<<std::endl ;
                     return false ;
                 }
             }
@@ -47,6 +47,9 @@ private:
 public:
     HierachyZBuffer(int height,int width)
     {
+        image_height = height ;
+        image_width = width ;
+
         int level_height = ceil(log(double(height))/log(2.0)) ;
         int level_width = ceil(log(double(width))/log(2.0)) ;
 
@@ -78,16 +81,16 @@ public:
     }
     void to_string()
     {
-        for(int i = minlevel-1 ; i >= 0  ;i--)
+//        for(int i = minlevel-1 ; i >= 0  ;i--)
+        for(int i = 0 ; i >= 0  ;i--)
         {
             std::cout<<"from level "<<i<<std::endl ;
-            buffer[i] = new ZBuffer(begin_height[i], begin_width[i]) ;
             for(int m = 0 ; m < begin_height[i]; m++)
             {
                 for(int n = 0  ; n< begin_width[i] ; n++)
                 {
 //                    std::cout<<" level: "<< i << " x :"<<m<<" y :"<<n<<(*buffer[i])[m][n]<<std::endl ;
-                    std::cout<<(*buffer[i])[m][n]<<" ";
+                    std::cout<<(*(buffer[i]))[m][n]<<" ";
                 }
                 std::cout<<std::endl ;
             }
@@ -120,10 +123,10 @@ public:
     {
         if((*(buffer[0]))[x][y] <= depth)
         {
-            std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
+//            std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
             return false;
         }
-        std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
+//        std::cout<<(*(buffer[0]))[x][y]<<" "<<depth<<std::endl ;
         return true ;
     }
 
@@ -150,6 +153,7 @@ public:
 #endif
 
             (*(buffer[level+1]))[beginx/2][beginy/2] = result ;
+//            std::cout<<level+1<<" x:"<<beginx/2<<" y:"<<beginy/2<<" z:"<<result<<std::endl ;
 #ifdef  LOG
             std::cout<<"level "<<level+1<<"change "<<beginx/2<<" "<<beginy/2<<" using depth"<< result <<std::endl ;
 #endif
@@ -174,10 +178,11 @@ public:
     bool canRejectBox(Vec3f pmin_, Vec3f pmax_, float mindepth)
     {
         int count = minlevel-1 ;
-        if(pmax_[0]<0 || pmax_[1]<0  || pmin_[0]>begin_height[0] || pmin_[1]>begin_width[0] )
+        if(pmax_[0]<0 || pmax_[1]<0  || pmin_[0]>image_height || pmin_[1]>image_height )
         {
             return true ;
         }
+
 
         Vec2f pmin = Vec2f(pmin_[0]/begin_height[0],pmin_[1]/begin_width[0]) ;
         Vec2f pmax = Vec2f(pmax_[0]/begin_height[0],pmax_[1]/begin_width[0]) ;
@@ -185,8 +190,8 @@ public:
 
         for(int i = 0 ; i < minlevel-1 ; i++)
         {
-            Vec2f p_min = Vec2f(pmin[0] * begin_height[count] , pmin[1] * begin_width[count] );
-            Vec2f p_max = Vec2f(pmax[0] * begin_height[count] , pmax[1] * begin_width[count] );
+            Vec2f p_min = Vec2f(pmin[0] * (begin_height[count]-1) , pmin[1] * (begin_width[count]-1) );
+            Vec2f p_max = Vec2f(pmax[0] * (begin_height[count]-1), pmax[1] * (begin_width[count]-1) );
 
             // If all buffer value is less than mindepth, so we can't write any value.
             if(canRejectBox_level(count,p_min,p_max,mindepth)==true)

@@ -268,6 +268,7 @@ void Triangle::draw_hierachy_zbuffer(TGAImage& image,HierachyZBuffer& hzbuffer ,
             {
                 hzbuffer.cover(int(p.x),int(p.y),p.z) ;
                 image.set(p.x,p.y,color1) ;
+//                std::cout<<" x:"<<p.x<<" y:"<<p.y<<" z:"<<p.z<<std::endl ;
             }
 
         }

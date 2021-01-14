@@ -16,8 +16,8 @@
 #include <omp.h>
 
 
-const int width = 800;
-const int height = 800 ;
+const int width = 1024;
+const int height = 1024 ;
 const int depth = 255  ;
 
 //Vec3f light_dir(0,0,-1) ;
@@ -69,7 +69,7 @@ void renderToImageHZ(ObjData& objData, TGAImage& renderimage , TGAImage& texture
 
     if(intensity[0]+intensity[1]+intensity[2]>0)
 //            d.draw(image1,*zBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],image ) ;
-        d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
+        d.draw_hierachy_zbuffer(renderimage,(*hzBuffer), t4,texture,intensity[0]+intensity[1]+intensity[2],textureImage) ;
 //    d.draw_hierachy_zbuffer(renderimage,*hzBuffer, t4,texture,1,textureImage) ;
 
 }
@@ -240,7 +240,7 @@ int usingHZandOctree(int argc,ObjLoader& loader )
             // 只有不能拒绝的时候，才接下去干
             if(newNode->getFaceSize()>0 && !hzBuffer->canRejectBox(t5->getPmin(),t5->getPmax(),t5->getPmin()[2]))
             {
-                std::cout<<"can't reject"<<std::endl ;
+//                std::cout<<"can't reject"<<std::endl ;
                 if(newNode->isLeafNode())
                 {
                     if(newNode->getFaces_size()<=0) continue ;
@@ -265,9 +265,9 @@ int usingHZandOctree(int argc,ObjLoader& loader )
     #endif
 //                    }
     //                break ;
-                    std::cout<<"render over"<<std::endl ;
-                    hzBuffer->to_string() ;
-                    break ;
+//                    std::cout<<"render over"<<std::endl ;
+//                    hzBuffer->to_string() ;
+//                    break ;
                 }else{
                         std::pair<OcNode*,int> tt = std::pair<OcNode*,int>(newNode,0) ;
                         stk.push(tt) ;
@@ -383,7 +383,7 @@ int main(int argc, char** argv)
     ObjLoader loader("../testData/cube.obj") ;
     Vec3f begin = Vec3f(-25,-25,-25) ;
     Vec3f box = Vec3f(50,50,50) ;
-    loader.randomCopy(300000,begin,box) ;
+    loader.randomCopy(20000,begin,box) ;
 //    loader.Copy(30, begin, box) ;
     loader.appendData("../testData/cube1.obj") ;
 //    usingHZ(1000,loader) ;
