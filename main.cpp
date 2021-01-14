@@ -347,9 +347,9 @@ int main(int argc, char** argv)
     loader.Copy(10, begin, box) ;
 //    loader.appendData("../testData/cube1.obj") ;
     loader.appendData("../testData/lidan.obj") ;
-//    usingHZ(1000,loader) ;
+    usingHZ(1000,loader) ;
 //    usingScanlineBuffer(1000,loader) ;
-    usingHZandOctree(1000,loader) ;
+//    usingHZandOctree(1000,loader) ;
 }
 
 
